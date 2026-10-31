@@ -4,9 +4,14 @@
 
 [node name="NivelCompletado" type="CanvasLayer" unique_id=650520539]
 script = ExtResource("1_shole")
+metadata/_edit_vertical_guides_ = [576.0]
+metadata/_edit_horizontal_guides_ = [324.0]
 
 [node name="Label" type="Label" parent="." unique_id=1008931880]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 226.46204
+offset_top = 147.0
+offset_right = 927.16394
+offset_bottom = 502.0
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 2

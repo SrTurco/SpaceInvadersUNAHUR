@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b8ulql44psdxx" path="res://Escenas/Laser.tscn" id="2_eyb4a"]
 [ext_resource type="Script" uid="uid://g1ve5q4f3yve" path="res://Scripts/AlienManager.cs" id="3_eyb4a"]
 [ext_resource type="PackedScene" uid="uid://dxl5gh3nvg0il" path="res://Escenas/Enemigo.tscn" id="4_rlj6f"]
+[ext_resource type="PackedScene" uid="uid://cwfn2yd4ffkjt" path="res://Escenas/Interfaz.tscn" id="5_y25gf"]
 
 [node name="Lvl1" type="Node2D" unique_id=1172304703]
 
@@ -15,3 +16,5 @@ laserEscena = ExtResource("2_eyb4a")
 [node name="AlienManager" type="Node2D" parent="." unique_id=1254925008]
 script = ExtResource("3_eyb4a")
 alienEscena = ExtResource("4_rlj6f")
+
+[node name="Interfaz" parent="." unique_id=1391914025 instance=ExtResource("5_y25gf")]

@@ -46,4 +46,9 @@ public partial class GameManager : Node
 			GetTree().ChangeSceneToFile("res://Escenas/WinScreen.tscn");
 		}
 	}
+	
+	public void pasarANivelCompletado()
+	{
+		GetTree().ChangeSceneToFile("res://Escenas/NivelCompletado.tscn");
+	}
 }

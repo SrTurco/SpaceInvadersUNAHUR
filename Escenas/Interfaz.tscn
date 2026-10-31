@@ -1,3 +1,20 @@
 [gd_scene format=3 uid="uid://cwfn2yd4ffkjt"]
 
-[node name="Interfaz" type="Node2D" unique_id=1391914025]
+[ext_resource type="Script" uid="uid://d4c0uocn853np" path="res://Escenas/Interfaz.cs" id="1_peb2f"]
+
+[node name="Interfaz" type="CanvasLayer" unique_id=1240591982]
+script = ExtResource("1_peb2f")
+
+[node name="textoPuntos" type="Label" parent="." unique_id=621165374]
+offset_left = 1037.0
+offset_top = 6.0
+offset_right = 1088.0
+offset_bottom = 29.0
+text = "score: "
+
+[node name="textoVida" type="Label" parent="." unique_id=134075513]
+offset_left = 16.0
+offset_top = 608.0
+offset_right = 57.0
+offset_bottom = 631.0
+text = "vida: "
