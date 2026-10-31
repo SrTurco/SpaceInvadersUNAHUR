@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b8ulql44psdxx"]
+
+[ext_resource type="Script" uid="uid://hknclhe7m7lh" path="res://Scripts/Laser.cs" id="1_jt7ek"]
+[ext_resource type="Texture2D" uid="uid://1iph1x4aatrx" path="res://Assets/SpaceInvaders_BackgroundFloor.png" id="2_l6dhm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_asa25"]
+size = Vector2(9, 44)
+
+[node name="CharacterBody2D" type="Area2D" unique_id=1629999108]
+script = ExtResource("1_jt7ek")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1521882832]
+scale = Vector2(0.140625, 0.703125)
+texture = ExtResource("2_l6dhm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1364010868]
+shape = SubResource("RectangleShape2D_asa25")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
