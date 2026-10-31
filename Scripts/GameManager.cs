@@ -2,11 +2,11 @@ using Godot;
 
 public partial class GameManager : Node
 {
-	public static GameManager instance; // para llamarlo desde cualquier lado
+	public static GameManager instance;
 
 	[Export] public int puntos = 0;
 	[Export] public int vidas = 3;
-	private int nivelActual = 1;
+	public int nivelActual = 1; // Para saber qué nivel estamos jugando
 
 	public override void _Ready()
 	{
@@ -24,7 +24,26 @@ public partial class GameManager : Node
 		vidas--;
 		if (vidas <= 0)
 		{
-			GetTree().ChangeSceneToFile("res://Scenes/GameOverScreen.tscn");
+			GetTree().ChangeSceneToFile("res://Escenas/GameOverScreen.tscn");
+		}
+	}
+
+	public void siguienteNivel()
+	{
+		nivelActual++;
+		
+		// Cambiamos de escena según el número de nivel
+		if (nivelActual == 2)
+		{
+			GetTree().ChangeSceneToFile("res://Escenas/Lvl2.tscn");
+		}
+		else if (nivelActual == 3)
+		{
+			GetTree().ChangeSceneToFile("res://Escenas/Lvl3.tscn");
+		}
+		else
+		{
+			GetTree().ChangeSceneToFile("res://Escenas/WinScreen.tscn");
 		}
 	}
 }

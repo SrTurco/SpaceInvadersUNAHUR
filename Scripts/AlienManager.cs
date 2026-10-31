@@ -51,7 +51,8 @@ public partial class AlienManager : Node2D
 		// si no quedan hijos (se murieron todos los aliens)
 		if (GetChildCount() == 0)
 		{
-			GD.Print("ganaste el nivel!");
+			// ¡Cambiado a "Escenas" que es como se llama tu carpeta!
+			GetTree().ChangeSceneToFile("res://Escenas/NivelCompletado.tscn");
 		}
 	}
 
