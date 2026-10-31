@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cwfn2yd4ffkjt"]
 
-[ext_resource type="Script" uid="uid://d4c0uocn853np" path="res://Escenas/Interfaz.cs" id="1_peb2f"]
+[ext_resource type="Script" uid="uid://d4c0uocn853np" path="res://Scripts/Interfaz.cs" id="1_peb2f"]
 
 [node name="Interfaz" type="CanvasLayer" unique_id=1240591982]
 script = ExtResource("1_peb2f")

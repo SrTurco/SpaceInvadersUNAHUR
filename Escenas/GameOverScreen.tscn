@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://bcwies0d7buk0"]
+
+[ext_resource type="Script" uid="uid://ccwbosswptso1" path="res://Scripts/GameOverScreen.cs" id="1_1hpjk"]
+
+[sub_resource type="FontFile" id="FontFile_1hpjk"]
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/34/0/ascent = 0.0
+cache/0/34/0/descent = 0.0
+cache/0/34/0/underline_position = 0.0
+cache/0/34/0/underline_thickness = 0.0
+cache/0/34/0/scale = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_i71pp"]
+font = SubResource("FontFile_1hpjk")
+font_size = 34
+
+[node name="GameOverScreen" type="CanvasLayer" unique_id=1277601328]
+script = ExtResource("1_1hpjk")
+metadata/_edit_vertical_guides_ = [576.0]
+metadata/_edit_horizontal_guides_ = [324.0]
+
+[node name="Label" type="Label" parent="." unique_id=975012202]
+offset_left = 174.0
+offset_top = 123.0
+offset_right = 978.0
+offset_bottom = 525.0
+text = "¡GAME OVER!
+
+Presioná ESPACIO para reiniciar
+Presioná M para volver al menu"
+label_settings = SubResource("LabelSettings_i71pp")
+horizontal_alignment = 1
+vertical_alignment = 1

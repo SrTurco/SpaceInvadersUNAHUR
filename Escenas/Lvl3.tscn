@@ -1,3 +1,30 @@
 [gd_scene format=3 uid="uid://4u4rltlar5xd"]
 
+[ext_resource type="PackedScene" uid="uid://bv2rjtv2wbdmj" path="res://Escenas/player.tscn" id="1_2enq3"]
+[ext_resource type="PackedScene" uid="uid://b8ulql44psdxx" path="res://Escenas/Laser.tscn" id="2_kty2l"]
+[ext_resource type="Script" uid="uid://g1ve5q4f3yve" path="res://Scripts/AlienManager.cs" id="3_c7lvf"]
+[ext_resource type="PackedScene" uid="uid://dxl5gh3nvg0il" path="res://Escenas/Enemigo.tscn" id="4_eaurn"]
+[ext_resource type="PackedScene" uid="uid://cedjt4ydtr34w" path="res://Escenas/LaserEnemigo.tscn" id="5_kty2l"]
+[ext_resource type="PackedScene" uid="uid://cwfn2yd4ffkjt" path="res://Escenas/Interfaz.tscn" id="5_wt40r"]
+
 [node name="Lvl3" type="Node2D" unique_id=1142043743]
+
+[node name="CharacterBody2D" parent="." unique_id=2019332136 instance=ExtResource("1_2enq3")]
+position = Vector2(400, 540)
+scale = Vector2(0.242263, 0.242263)
+laserEscena = ExtResource("2_kty2l")
+
+[node name="AlienManager" type="Node2D" parent="." unique_id=1924031684]
+script = ExtResource("3_c7lvf")
+alienEscena = ExtResource("4_eaurn")
+filas = 5
+columnas = 10
+laserEnemigoEscena = ExtResource("5_kty2l")
+
+[node name="Timer" type="Timer" parent="AlienManager" unique_id=895465606]
+wait_time = 1.5
+autostart = true
+
+[node name="Interfaz" parent="." unique_id=1240591982 instance=ExtResource("5_wt40r")]
+
+[connection signal="timeout" from="AlienManager/Timer" to="AlienManager" method="_on_timer_timeout"]

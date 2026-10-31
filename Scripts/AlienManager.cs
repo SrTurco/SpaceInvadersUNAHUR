@@ -9,6 +9,7 @@ public partial class AlienManager : Node2D
 	[Export] public float espacioH = 60.0f;
 	[Export] public float espacioV = 50.0f;
 	[Export] public float velocidad = 80.0f;
+	[Export] public PackedScene laserEnemigoEscena;
 
 	// Variable para saber si se mueven a la derecha (1) o a la izquierda (-1)
 	private int direccion = 1;
@@ -85,4 +86,23 @@ public partial class AlienManager : Node2D
 		direccion *= -1; // Invierte el valor (si era 1 pasa a -1, y viceversa)
 		Position += new Vector2(0, 20); // Baja un poco en el eje Y
 	}
+	
+	private void _on_timer_timeout()
+	{
+		int cantidadAliens = GetChildCount();
+		if (cantidadAliens > 0 && laserEnemigoEscena != null)
+		{
+			int indiceAleatorio = (int)(GD.Randi() % (uint)cantidadAliens);
+			Node hijo = GetChild(indiceAleatorio);
+
+			if (hijo is Node2D alienAleatorio)
+			{
+				Node2D laserE = (Node2D)laserEnemigoEscena.Instantiate();
+				laserE.GlobalPosition = alienAleatorio.GlobalPosition + new Vector2(0, 20);
+				GetTree().CurrentScene.AddChild(laserE);
+			}
+		}
+	}
+	
+	
 }
