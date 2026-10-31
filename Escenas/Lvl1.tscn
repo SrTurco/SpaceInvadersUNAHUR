@@ -7,10 +7,11 @@
 [ext_resource type="PackedScene" uid="uid://cwfn2yd4ffkjt" path="res://Escenas/Interfaz.tscn" id="5_y25gf"]
 
 [node name="Lvl1" type="Node2D" unique_id=1172304703]
+metadata/_edit_vertical_guides_ = [576.0]
 
 [node name="CharacterBody2D" parent="." unique_id=2019332136 instance=ExtResource("1_lg31v")]
-position = Vector2(400, 540)
-scale = Vector2(0.242263, 0.242263)
+position = Vector2(576, 600)
+scale = Vector2(1.3999715, 1.3999715)
 laserEscena = ExtResource("2_eyb4a")
 
 [node name="AlienManager" type="Node2D" parent="." unique_id=1254925008]

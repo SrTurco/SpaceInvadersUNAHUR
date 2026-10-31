@@ -2,7 +2,7 @@ using Godot;
 
 public partial class AlienManager : Node2D
 {
-	// Variables exportadas para poder configurar la horda fácil desde el editor de Godot
+	// Datos configurables desde el editor para armar los enemigos
 	[Export] public PackedScene alienEscena;
 	[Export] public int filas = 3;
 	[Export] public int columnas = 8;
@@ -11,32 +11,32 @@ public partial class AlienManager : Node2D
 	[Export] public float velocidad = 80.0f;
 	[Export] public PackedScene laserEnemigoEscena;
 
-	// Variable para saber si se mueven a la derecha (1) o a la izquierda (-1)
+	// Dirección en la que se mueve la horda (1 es derecha, -1 es izquierda)
 	private int direccion = 1;
 
 	public override void _Ready()
 	{
-		// Apenas arranca la escena, llamamos a la función que arma la grilla de enemigos
-		crearAliens();
+		// Apenas arranca el nivel, armamos la formación de aliens
+		CrearAliens();
 	}
 
 	public override void _Process(double delta)
 	{
-		// 1. Mover la horda de un lado a otro horizontalmente
+		// 1. Movemos a los aliens de un lado a otro horizontalmente
 		Position += new Vector2(velocidad * direccion * (float)delta, 0);
 
-		// 2. Si la horda toca el borde derecho, baja y cambia de dirección a la izquierda
+		// 2. Si la horda toca el borde derecho, baja un escalón y va hacia la izquierda
 		if (Position.X + (columnas * espacioH) > 750 && direccion == 1)
 		{
-			bajarYCambiar();
+			BajarYCambiar();
 		}
-		// 3. Si toca el borde izquierdo, baja y cambia de dirección a la derecha
+		// 3. Si toca el borde izquierdo, baja un escalón y va hacia la derecha
 		else if (Position.X < 50 && direccion == -1)
 		{
-			bajarYCambiar();
+			BajarYCambiar();
 		}
 
-		// 4. Si la horda baja demasiado y llega a la zona baja (contacto con el jugador)
+		// 4. Si los aliens bajan demasiado y llegan a la zona del jugador, este pierde vida
 		if (Position.Y > 400)
 		{
 			if (GameManager.instance != null)
@@ -44,11 +44,11 @@ public partial class AlienManager : Node2D
 				GameManager.instance.perderVida();
 			}
 			
-			// Reiniciamos la posición de la horda arriba para que vuelva a empezar
+			// Devolvemos la horda arriba para reiniciar el ciclo
 			Position = new Vector2(100, 100); 
 		}
 
-		// 5. Si ya no quedan aliens vivos (hijos), pasamos a la pantalla de nivel completado
+		// 5. Si ya no quedan aliens vivos, ganamos el nivel
 		if (GetChildCount() == 0)
 		{
 			if (GameManager.instance != null)
@@ -58,51 +58,49 @@ public partial class AlienManager : Node2D
 		}
 	}
 
-	// Función para instanciar y ubicar a cada alien en forma de grilla
-	private void crearAliens()
+	// Función para dibujar la grilla de enemigos en filas y columnas
+	private void CrearAliens()
 	{
 		for (int r = 0; r < filas; r++)
 		{
 			for (int c = 0; c < columnas; c++)
 			{
-				// Creamos una copia del alien
 				Node2D alien = (Node2D)alienEscena.Instantiate();
 				
-				// Calculamos su posición según la columna y la fila
 				float x = c * espacioH;
 				float y = r * espacioV;
 				
 				alien.Position = new Vector2(x, y);
-				
-				// Lo sumamos como hijo del AlienManager
 				AddChild(alien);
 			}
 		}
 	}
 
-	// Función para hacer que la horda baje un escalón e invierta su rumbo
-	private void bajarYCambiar()
+	// Función para que la horda baje y cambie de rumbo
+	private void BajarYCambiar()
 	{
-		direccion *= -1; // Invierte el valor (si era 1 pasa a -1, y viceversa)
-		Position += new Vector2(0, 20); // Baja un poco en el eje Y
+		direccion *= -1; // Invierte la dirección
+		Position += new Vector2(0, 20); // Baja un poco en vertical
 	}
 	
+	// Función que se ejecuta cada vez que el temporizador (Timer) se completa para disparar
 	private void _on_timer_timeout()
 	{
 		int cantidadAliens = GetChildCount();
+		
 		if (cantidadAliens > 0 && laserEnemigoEscena != null)
 		{
+			// Elegimos un alien al azar de la horda
 			int indiceAleatorio = (int)(GD.Randi() % (uint)cantidadAliens);
 			Node hijo = GetChild(indiceAleatorio);
 
 			if (hijo is Node2D alienAleatorio)
 			{
+				// Creamos el disparo enemigo y lo ubicamos abajo del alien elegido
 				Node2D laserE = (Node2D)laserEnemigoEscena.Instantiate();
-				laserE.GlobalPosition = alienAleatorio.GlobalPosition + new Vector2(0, 20);
+				laserE.GlobalPosition = alienAleatorio.GlobalPosition + new Vector2(0, 35);
 				GetTree().CurrentScene.AddChild(laserE);
 			}
 		}
 	}
-	
-	
 }

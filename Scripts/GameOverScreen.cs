@@ -4,7 +4,7 @@ public partial class GameOverScreen : CanvasLayer
 {
 	public override void _Ready()
 	{
-		// Buscamos el botón en la escena y conectamos su señal de presionado
+		// Conectamos el botón de la interfaz para volver al menú
 		Button botonMenu = GetNodeOrNull<Button>("Button"); 
 		if (botonMenu != null)
 		{
@@ -14,13 +14,13 @@ public partial class GameOverScreen : CanvasLayer
 
 	public override void _Input(InputEvent @event)
 	{
-		// Espacio para reiniciar el nivel directamente
+		// Si presionan espacio, reiniciamos el juego
 		if (@event.IsActionPressed("ui_accept"))
 		{
 			ReiniciarJuego();
 		}
 		
-		// Si presionan la tecla 'M' (o podés cambiarla por otra), vuelve al menú principal
+		// Si presionan la letra 'M', volvemos al menú principal
 		if (@event is InputEventKey eventKey && eventKey.Pressed && eventKey.Keycode == Key.M)
 		{
 			AlPresionarMenu();
@@ -47,7 +47,6 @@ public partial class GameOverScreen : CanvasLayer
 			GameManager.instance.nivelActual = 1;
 		}
 		
-		// Cambiamos a la escena del menú principal
 		GetTree().ChangeSceneToFile("res://Escenas/MainMenu.tscn");
 	}
 }

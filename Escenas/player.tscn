@@ -1,17 +1,17 @@
 [gd_scene format=3 uid="uid://bv2rjtv2wbdmj"]
 
 [ext_resource type="Script" uid="uid://pg1iy2bd0qyj" path="res://Scripts/Player.cs" id="1_i8vih"]
-[ext_resource type="Texture2D" uid="uid://btdirwktwf67" path="res://Assets/LargeAlien.png" id="2_qgqwx"]
+[ext_resource type="Texture2D" uid="uid://ktxig0mn02i3" path="res://icon.svg" id="2_i8vih"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_asa25"]
-size = Vector2(303, 217)
+size = Vector2(31, 31)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=2019332136]
 script = ExtResource("1_i8vih")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1779009175]
 scale = Vector2(0.27000004, 0.27000004)
-texture = ExtResource("2_qgqwx")
+texture = ExtResource("2_i8vih")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=882015060]
 shape = SubResource("RectangleShape2D_asa25")

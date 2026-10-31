@@ -8,7 +8,7 @@ public partial class NivelCompletado : CanvasLayer
 	{
 		textoNivel = GetNode<Label>("Label");
 
-		// Mostramos dinámicamente el número de nivel completado
+		// Mostramos qué nivel se acaba de completar
 		if (GameManager.instance != null)
 		{
 			textoNivel.Text = "¡Nivel " + GameManager.instance.nivelActual + " Completado!\n\nPresioná ESPACIO para continuar";
@@ -21,7 +21,7 @@ public partial class NivelCompletado : CanvasLayer
 
 	public override void _Input(InputEvent @event)
 	{
-		// Detectamos si el jugador presiona la barra espaciadora
+		// Si presionan espacio, pasamos al siguiente nivel
 		if (@event.IsActionPressed("ui_accept"))
 		{
 			if (GameManager.instance != null)
@@ -30,7 +30,6 @@ public partial class NivelCompletado : CanvasLayer
 			}
 			else
 			{
-				// Por si probás la escena suelta
 				GetTree().ChangeSceneToFile("res://Escenas/Lvl2.tscn");
 			}
 		}
