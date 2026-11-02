@@ -18,6 +18,7 @@ script = ExtResource("3_6jvix")
 alienEscena = ExtResource("4_f3wkl")
 filas = 5
 columnas = 10
+espacioV = 30.0
 velocidad = 110.0
 
 [node name="Interfaz" parent="." unique_id=1240591982 instance=ExtResource("5_ovbg6")]

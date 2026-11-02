@@ -1,3 +1,23 @@
 [gd_scene format=3 uid="uid://vstj3q6bgdhu"]
 
-[node name="MainMenu" type="Node2D" unique_id=1919217612]
+[ext_resource type="Script" uid="uid://co3wgf1i6taqm" path="res://Scripts/MainMenu.cs" id="1_3bb84"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_in5sg"]
+font_size = 80
+
+[node name="MainMenu" type="CanvasLayer" unique_id=1244224314]
+script = ExtResource("1_3bb84")
+metadata/_edit_vertical_guides_ = [576.0]
+
+[node name="Label" type="Label" parent="." unique_id=411383064]
+offset_left = 262.0
+offset_top = 40.0
+offset_right = 892.0
+offset_bottom = 150.0
+text = "SPACEINVADERS
+
+\"Enter\" para Jugar
+\"T\" para Tutorial"
+label_settings = SubResource("LabelSettings_in5sg")
+horizontal_alignment = 1
+vertical_alignment = 1
