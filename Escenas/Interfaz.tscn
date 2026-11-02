@@ -6,15 +6,15 @@
 script = ExtResource("1_peb2f")
 
 [node name="textoPuntos" type="Label" parent="." unique_id=621165374]
-offset_left = 1037.0
+offset_left = 875.0
 offset_top = 6.0
-offset_right = 1088.0
+offset_right = 926.0
 offset_bottom = 29.0
 text = "score: "
 
 [node name="textoVida" type="Label" parent="." unique_id=134075513]
 offset_left = 16.0
-offset_top = 608.0
+offset_top = 730.0
 offset_right = 57.0
-offset_bottom = 631.0
+offset_bottom = 753.0
 text = "vida: "

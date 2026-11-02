@@ -8,9 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://cwfn2yd4ffkjt" path="res://Escenas/Interfaz.tscn" id="5_wt40r"]
 
 [node name="Lvl3" type="Node2D" unique_id=1142043743]
+metadata/_edit_horizontal_guides_ = [649.0]
+metadata/_edit_vertical_guides_ = [513.0, 512.0]
 
 [node name="CharacterBody2D" parent="." unique_id=2019332136 instance=ExtResource("1_2enq3")]
-position = Vector2(576, 600)
+position = Vector2(512, 737)
 scale = Vector2(1.4, 1.4)
 laserEscena = ExtResource("2_kty2l")
 
@@ -18,7 +20,8 @@ laserEscena = ExtResource("2_kty2l")
 script = ExtResource("3_c7lvf")
 alienEscena = ExtResource("4_eaurn")
 filas = 5
-columnas = 10
+espacioH = 80.0
+espacioV = 80.0
 laserEnemigoEscena = ExtResource("5_kty2l")
 
 [node name="Timer" type="Timer" parent="AlienManager" unique_id=895465606]

@@ -7,6 +7,7 @@
 size = Vector2(129, 140)
 
 [node name="CharacterBody2D" type="Area2D" unique_id=268197077]
+scale = Vector2(1.4708395, 1.4708395)
 script = ExtResource("1_nxnwl")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=547333721]

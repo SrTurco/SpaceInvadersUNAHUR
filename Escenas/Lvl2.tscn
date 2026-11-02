@@ -16,9 +16,9 @@ laserEscena = ExtResource("2_ut5ub")
 [node name="AlienManager" type="Node2D" parent="." unique_id=508498892]
 script = ExtResource("3_6jvix")
 alienEscena = ExtResource("4_f3wkl")
-filas = 5
-columnas = 10
-espacioV = 30.0
+filas = 4
+espacioH = 80.0
+espacioV = 80.0
 velocidad = 110.0
 
 [node name="Interfaz" parent="." unique_id=1240591982 instance=ExtResource("5_ovbg6")]

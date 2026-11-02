@@ -5,6 +5,9 @@ public partial class Player : CharacterBody2D
 	// Velocidad a la que se mueve el jugador en la pantalla
 	[Export] public float velocidad = 350.0f;
 	
+	// Margen respecto al borde de la pantalla (en píxeles)
+	[Export] public float margenBorde = 30.0f;
+
 	// Guardamos la escena del láser para poder clonarla cuando disparamos
 	[Export] public PackedScene laserEscena;
 
@@ -21,9 +24,12 @@ public partial class Player : CharacterBody2D
 		Velocity = vel;
 		MoveAndSlide();
 
-		// Evitamos que el jugador se salga de los límites de la pantalla
+		// Obtenemos el ancho actual del viewport/pantalla
+		float anchoPantalla = GetViewportRect().Size.X;
+
+		// Restringimos la posición del jugador dentro de los bordes dinámicos
 		Vector2 pos = Position;
-		pos.X = Mathf.Clamp(pos.X, 40f, 760f);
+		pos.X = Mathf.Clamp(pos.X, margenBorde, anchoPantalla - margenBorde);
 		Position = pos;
 
 		// Si presionamos la barra espaciadora, disparamos
