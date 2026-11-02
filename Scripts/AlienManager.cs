@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 public partial class AlienManager : Node2D
 {
@@ -33,7 +34,7 @@ public partial class AlienManager : Node2D
 		// Ancho total que ocupa la formación de aliens
 		float anchoHorda = (columnas - 1) * espacioH;
 
-		// 2. Colisión borde derecho (considerando la posición local del último alien)
+		// 2. Colisión borde derecho
 		if (Position.X + anchoHorda >= tamanoPantalla.X - 20 && direccion == 1)
 		{
 			BajarYCambiar();
@@ -67,29 +68,42 @@ public partial class AlienManager : Node2D
 	}
 
 	private void CentrarYCrearAliens()
+{
+	float anchoHorda = (columnas - 1) * espacioH;
+	float xInicial = (tamanoPantalla.X - anchoHorda) / 2.0f;
+	float yInicial = offsetSuperior;
+
+	posicionInicial = new Vector2(xInicial, yInicial);
+	Position = posicionInicial;
+
+	for (int r = 0; r < filas; r++)
 	{
-		// Ancho que ocupa la horda desde la primera a la última columna
-		float anchoHorda = (columnas - 1) * espacioH;
-
-		// Calculamos X para que la horda quede exactamente al centro de la pantalla
-		float xInicial = (tamanoPantalla.X - anchoHorda) / 2.0f;
-		float yInicial = offsetSuperior;
-
-		posicionInicial = new Vector2(xInicial, yInicial);
-		Position = posicionInicial;
-
-		// Instanciar los aliens en la grilla
-		for (int r = 0; r < filas; r++)
+		for (int c = 0; c < columnas; c++)
 		{
-			for (int c = 0; c < columnas; c++)
+			Enemigo alien = (Enemigo)alienEscena.Instantiate();
+			
+			// 1. Asignamos el tipo de enemigo por fila
+			if (r == 0)
 			{
-				Node2D alien = (Node2D)alienEscena.Instantiate();
-				alien.Position = new Vector2(c * espacioH, r * espacioV);
-				AddChild(alien);
+				alien.tipo = TipoEnemigo.Tirador;
 			}
+			else if (r == 1)
+			{
+				alien.tipo = TipoEnemigo.ZigZag;
+			}
+			else
+			{
+				alien.tipo = TipoEnemigo.Normal;
+			}
+
+			// 2. IMPORTANTE: Actualizamos la skin explícitamente
+			alien.ConfigurarSkin();
+
+			alien.Position = new Vector2(c * espacioH, r * espacioV);
+			AddChild(alien);
 		}
 	}
-
+}
 	private void BajarYCambiar()
 	{
 		direccion *= -1;
@@ -98,19 +112,26 @@ public partial class AlienManager : Node2D
 
 	private void _on_timer_timeout()
 	{
-		int cantidadAliens = GetChildCount();
-		
-		if (cantidadAliens > 0 && laserEnemigoEscena != null)
-		{
-			int indiceAleatorio = (int)(GD.Randi() % (uint)cantidadAliens);
-			Node hijo = GetChild(indiceAleatorio);
+		// Filtramos únicamente a los aliens que sean de tipo Tirador
+		List<Enemigo> tiradores = new List<Enemigo>();
 
-			if (hijo is Node2D alienAleatorio)
+		foreach (Node hijo in GetChildren())
+		{
+			if (hijo is Enemigo alien && alien.tipo == TipoEnemigo.Tirador)
 			{
-				Node2D laserE = (Node2D)laserEnemigoEscena.Instantiate();
-				laserE.GlobalPosition = alienAleatorio.GlobalPosition + new Vector2(0, 35);
-				GetTree().CurrentScene.AddChild(laserE);
+				tiradores.Add(alien);
 			}
+		}
+
+		// Si hay tiradores vivos, uno aleatorio dispara
+		if (tiradores.Count > 0 && laserEnemigoEscena != null)
+		{
+			int indiceAleatorio = (int)(GD.Randi() % (uint)tiradores.Count);
+			Enemigo tiradorElegido = tiradores[indiceAleatorio];
+
+			Node2D laserE = (Node2D)laserEnemigoEscena.Instantiate();
+			laserE.GlobalPosition = tiradorElegido.GlobalPosition + new Vector2(0, 35);
+			GetTree().CurrentScene.AddChild(laserE);
 		}
 	}
 }

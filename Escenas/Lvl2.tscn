@@ -9,7 +9,7 @@
 [node name="Lvl2" type="Node2D" unique_id=162527668]
 
 [node name="CharacterBody2D" parent="." unique_id=2019332136 instance=ExtResource("1_j638k")]
-position = Vector2(576, 600)
+position = Vector2(512, 740)
 scale = Vector2(1.4, 1.4)
 laserEscena = ExtResource("2_ut5ub")
 

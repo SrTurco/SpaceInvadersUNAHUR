@@ -10,7 +10,7 @@
 metadata/_edit_vertical_guides_ = [576.0]
 
 [node name="CharacterBody2D" parent="." unique_id=2019332136 instance=ExtResource("1_lg31v")]
-position = Vector2(576, 600)
+position = Vector2(512, 740)
 scale = Vector2(1.3999715, 1.3999715)
 laserEscena = ExtResource("2_eyb4a")
 

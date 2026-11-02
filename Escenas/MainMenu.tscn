@@ -10,10 +10,10 @@ script = ExtResource("1_3bb84")
 metadata/_edit_vertical_guides_ = [576.0]
 
 [node name="Label" type="Label" parent="." unique_id=411383064]
-offset_left = 262.0
-offset_top = 40.0
-offset_right = 892.0
-offset_bottom = 150.0
+offset_left = 160.0
+offset_top = 160.0
+offset_right = 856.0
+offset_bottom = 609.0
 text = "SPACEINVADERS
 
 \"Enter\" para Jugar

@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://dxl5gh3nvg0il"]
 
 [ext_resource type="Script" uid="uid://c4xoy21ipfkce" path="res://Scripts/Enemigo.cs" id="1_nxnwl"]
-[ext_resource type="Texture2D" uid="uid://ktxig0mn02i3" path="res://icon.svg" id="2_hbr6x"]
+[ext_resource type="Texture2D" uid="uid://dvmyxqnh5k05s" path="res://Assets/Space-invaders-top-alien.png" id="2_id87n"]
+[ext_resource type="Texture2D" uid="uid://b5tceyerpijq8" path="res://Assets/images.png" id="3_c0vl1"]
+[ext_resource type="Texture2D" uid="uid://bcyda2w30x0j2" path="res://Assets/Space-Invaders-Alien-PNG-Image-with-Transparent-Background.png" id="4_qxddr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_asa25"]
 size = Vector2(129, 140)
@@ -10,9 +12,17 @@ size = Vector2(129, 140)
 scale = Vector2(1.4708395, 1.4708395)
 script = ExtResource("1_nxnwl")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=547333721]
-scale = Vector2(0.24444738, 0.24444738)
-texture = ExtResource("2_hbr6x")
+[node name="Skin1" type="Sprite2D" parent="." unique_id=547333721]
+scale = Vector2(0.06120609, 0.06120609)
+texture = ExtResource("2_id87n")
+
+[node name="Skin2" type="Sprite2D" parent="." unique_id=2124357626]
+scale = Vector2(0.059754517, 0.059754517)
+texture = ExtResource("3_c0vl1")
+
+[node name="Skin3" type="Sprite2D" parent="." unique_id=1741458508]
+scale = Vector2(0.050679903, 0.08641566)
+texture = ExtResource("4_qxddr")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1494728616]
 position = Vector2(1, 0)
