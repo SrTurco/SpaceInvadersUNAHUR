@@ -13,7 +13,6 @@ public partial class AlienManager : Node2D
 
 	[Export] public float offsetSuperior = 80.0f;
 
-	// Lo puse public para que los enemigos tiradores estáticos puedan leer la dirección de la horda
 	public int direccion = 1; 
 	private Vector2 tamanoPantalla;
 	private Vector2 posicionInicial;
@@ -26,12 +25,12 @@ public partial class AlienManager : Node2D
 
 	public override void _Process(double delta)
 	{
-		// 1. Muevo toda la horda horizontalmente
+		// 1. Muevo a toda la horda para los costados
 		Position += new Vector2(velocidad * direccion * (float)delta, 0);
 
 		float anchoHorda = (columnas - 1) * espacioH;
 
-		// 2. Si tocamos el borde derecho o izquierdo, bajamos y cambiamos de rumbo
+		// 2. Si tocamos los bordes de la pantalla, bajamos un toque y cambiamos de dirección
 		if (Position.X + anchoHorda >= tamanoPantalla.X - 20 && direccion == 1)
 		{
 			BajarYCambiar();
@@ -41,17 +40,7 @@ public partial class AlienManager : Node2D
 			BajarYCambiar();
 		}
 
-		// 3. Si los aliens bajan demasiado, perdemos vida y reseteamos posición
-		if (Position.Y > tamanoPantalla.Y - 100)
-		{
-			if (GameManager.instance != null)
-			{
-				GameManager.instance.perderVida();
-			}
-			Position = posicionInicial; 
-		}
-
-		// 4. Si ya no quedan hijos (matamos a todos), pasamos al cartel de nivel completado
+		// 3. Si matamos a todos los bichos, ganamos el nivel
 		if (GetChildCount() == 0)
 		{
 			if (GameManager.instance != null)
@@ -59,6 +48,17 @@ public partial class AlienManager : Node2D
 				GameManager.instance.pasarANivelCompletado();
 			}
 		}
+	}
+
+	// Método público para que cualquier alien avise si chocó al jugador
+	public void ReiniciarPosicionHorda()
+	{
+		if (GameManager.instance != null)
+		{
+			GameManager.instance.perderVida();
+		}
+		// Mandamos a toda la horda arriba de nuevo sin destruir al alien que chocó
+		Position = posicionInicial; 
 	}
 
 	private void CentrarYCrearAliens()
@@ -78,21 +78,27 @@ public partial class AlienManager : Node2D
 			{
 				Enemigo alien = (Enemigo)alienEscena.Instantiate();
 				
-				// Acá defino qué tipo de bicho va en cada lugar:
-				// - Las columnas de las puntas (laterales) son los que hacen zigzag independiente
-				if (c == 0 || c == columnas - 1)
+				// REGLAS SEGÚN EL NIVEL:
+				if (nivelActual == 1)
 				{
-					alien.tipo = TipoEnemigo.ZigZag;
+					// LVL 1: Todos normales (Skin 1), sin zigzag
+					alien.tipo = TipoEnemigo.Normal;
 				}
-				// - En el nivel 3, los de arriba del todo (salvo las puntas) son los tiradores estáticos
-				else if (r == 0 && nivelActual == 3)
-				{
-					alien.tipo = TipoEnemigo.Tirador;
-				}
-				// - El resto son los normales de la horda común
 				else
 				{
-					alien.tipo = TipoEnemigo.Normal;
+					// LVL 2 y LVL 3: Los laterales hacen zigzag y el resto normal/tirador
+					if (c == 0 || c == columnas - 1)
+					{
+						alien.tipo = TipoEnemigo.ZigZag;
+					}
+					else if (r == 0 && nivelActual == 3)
+					{
+						alien.tipo = TipoEnemigo.Tirador;
+					}
+					else
+					{
+						alien.tipo = TipoEnemigo.Normal;
+					}
 				}
 
 				alien.ConfigurarSkin();
@@ -111,11 +117,10 @@ public partial class AlienManager : Node2D
 	private void _on_timer_timeout()
 	{
 		int nivelActual = (GameManager.instance != null) ? GameManager.instance.nivelActual : 1;
-		if (nivelActual < 3) return; // Solo disparamos si estamos en el nivel 3
+		if (nivelActual < 3) return; // Solo disparamos en el nivel 3
 
 		List<Enemigo> tiradores = new List<Enemigo>();
 
-		// Busco cuáles son los enemigos tiradores que siguen vivos
 		foreach (Node hijo in GetChildren())
 		{
 			if (hijo is Enemigo alien && alien.tipo == TipoEnemigo.Tirador)
@@ -124,7 +129,6 @@ public partial class AlienManager : Node2D
 			}
 		}
 
-		// Si hay tiradores, elijo uno al azar para que dispare su rayito
 		if (tiradores.Count > 0 && laserEnemigoEscena != null)
 		{
 			int indiceAleatorio = (int)(GD.Randi() % (uint)tiradores.Count);
