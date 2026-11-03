@@ -2,7 +2,7 @@ using Godot;
 
 public partial class GameManager : Node
 {
-	// Instancia global para acceder a los datos desde cualquier script fácilmente
+	// Instancia estática para poder consultar datos desde cualquier script fácilmente (como un GameManager global)
 	public static GameManager instance;
 
 	[Export] public int puntos = 0;
@@ -14,25 +14,25 @@ public partial class GameManager : Node
 		instance = this;
 	}
 
-	// Función para sumar puntos cuando destruimos un alien
+	// Sube el puntaje cuando matamos un alien
 	public void sumarPuntos(int cantidad)
 	{
 		puntos += cantidad;
 		GD.Print("Puntos actuales: " + puntos);
 	}
 
-	// Función para restar vidas cuando nos pega un enemigo o bajan demasiado
+	// Resta vida si nos pegan o si los aliens se pasan de la raya abajo
 	public void perderVida()
 	{
 		vidas--;
 		if (vidas <= 0)
 		{
-			// Si nos quedamos sin vidas, vamos a la pantalla de Game Over
+			// Si nos quedamos sin vidas, mandamos a la pantalla de Game Over
 			GetTree().ChangeSceneToFile("res://Escenas/GameOverScreen.tscn");
 		}
 	}
 
-	// Función para avanzar de nivel
+	// Función para avanzar al siguiente nivel según el número actual
 	public void siguienteNivel()
 	{
 		nivelActual++;
@@ -51,9 +51,9 @@ public partial class GameManager : Node
 		}
 	}
 	
-	// Pantalla intermedia cuando completamos un nivel
+	// Pantalla intermedia cuando pasamos un nivel
 	public void pasarANivelCompletado()
 	{
 		GetTree().ChangeSceneToFile("res://Escenas/NivelCompletado.tscn");
 	}
-	}
+}
