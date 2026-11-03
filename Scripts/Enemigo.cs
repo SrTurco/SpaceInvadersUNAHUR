@@ -11,52 +11,87 @@ public partial class Enemigo : Area2D
 {
 	[Export] public TipoEnemigo tipo = TipoEnemigo.Normal;
 
-	// Referencias a las skins dentro del nodo Enemigo (pueden ser Sprite2D)
-	[Export] public Sprite2D skin1;
-	[Export] public Sprite2D skin2;
-	[Export] public Sprite2D skin3;
+	private Sprite2D skin1Node;
+	private Sprite2D skin2Node;
+	private Sprite2D skin3Node;
 
-	private float tiempoZigZag = 0.0f;
+	private float tiempo = 0.0f;
+	private Vector2 posicionBaseGlobal;
+	private Vector2 tamanoPantalla;
+	private bool esZigZagInvertido = false; // Sirve para saber de qué lado empieza a cruzar cada uno
 
 	public override void _Ready()
 	{
+		// Busco las skins por nombre entre los hijos del nodo
+		skin1Node = GetNodeOrNull<Sprite2D>("Skin1");
+		skin2Node = GetNodeOrNull<Sprite2D>("Skin2");
+		skin3Node = GetNodeOrNull<Sprite2D>("Skin3");
+
+		tamanoPantalla = GetViewportRect().Size;
+		posicionBaseGlobal = GlobalPosition;
+
+		// Si está más a la derecha, invierto el zigzag para que cruce al revés
+		if (posicionBaseGlobal.X > tamanoPantalla.X / 2.0f)
+		{
+			esZigZagInvertido = true;
+		}
+
 		ConfigurarSkin();
 	}
 
 	public void ConfigurarSkin()
 	{
-		// Ocultar todas las skins
-		if (skin1 != null) skin1.Visible = false;
-		if (skin2 != null) skin2.Visible = false;
-		if (skin3 != null) skin3.Visible = false;
+		// Apago todas las skins de entrada por las dudas
+		if (skin1Node != null) skin1Node.Visible = false;
+		if (skin2Node != null) skin2Node.Visible = false;
+		if (skin3Node != null) skin3Node.Visible = false;
 
-		// Mostrar la skin correcta según el tipo asignado
+		// Prendo solo la que corresponde según el tipo que me asignaron
 		switch (tipo)
 		{
 			case TipoEnemigo.Normal:
-				if (skin1 != null) skin1.Visible = true;
-				break;
-
-			case TipoEnemigo.Tirador:
-				if (skin2 != null) skin2.Visible = true;
+				if (skin1Node != null) skin1Node.Visible = true;
 				break;
 
 			case TipoEnemigo.ZigZag:
-				if (skin3 != null) skin3.Visible = true;
+				if (skin2Node != null) skin2Node.Visible = true;
+				break;
+
+			case TipoEnemigo.Tirador:
+				if (skin3Node != null) skin3Node.Visible = true;
 				break;
 		}
 	}
 
 	public override void _Process(double delta)
 	{
-		// Si el alien es tipo ZigZag, oscila horizontalmente dentro de su celda
+		tiempo += (float)delta;
+
+		// 1. Si es de los que hacen zigzag, se mueven libres barriendo los laterales
 		if (tipo == TipoEnemigo.ZigZag)
 		{
-			tiempoZigZag += (float)delta * 6.0f; // Velocidad del zigzag
-
-			if (skin3 != null)
+			posicionBaseGlobal.Y += 30.0f * (float)delta; // Van bajando lento
+			if (posicionBaseGlobal.Y > tamanoPantalla.Y + 50) 
 			{
-				skin3.Position = new Vector2(Mathf.Sin(tiempoZigZag) * 12.0f, skin3.Position.Y);
+				posicionBaseGlobal.Y = -50; // Si se van abajo de todo, reaparecen arriba
+			}
+
+			float anchoUtil = tamanoPantalla.X - 100;
+			float centroX = tamanoPantalla.X / 2.0f;
+			
+			// Uso una función seno para hacer el movimiento ondulatorio de lado a lado
+			float offsetX = Mathf.Sin(tiempo * 2.0f + (esZigZagInvertido ? Mathf.Pi : 0.0f)) * (anchoUtil / 2.0f);
+
+			GlobalPosition = new Vector2(centroX + offsetX, posicionBaseGlobal.Y);
+		}
+
+		// 2. Si es tirador, anulo el movimiento del manager para quedarme quietito arriba
+		else if (tipo == TipoEnemigo.Tirador)
+		{
+			Node padre = GetParent();
+			if (padre is AlienManager alienManager)
+			{
+				Position -= new Vector2(alienManager.velocidad * alienManager.direccion * (float)delta, 0);
 			}
 		}
 	}

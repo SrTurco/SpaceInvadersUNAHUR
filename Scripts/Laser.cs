@@ -3,14 +3,14 @@ using Godot;
 public partial class Laser : Area2D
 {
 	[Export] public float velocidad = 400.0f;
-	private bool hasHit = false; // Sirve para que el láser impacte una sola vez y no haga doble daño
+	private bool hasHit = false; // Bandera para que el láser impacte una sola vez y no haga doble daño
 
 	public override void _Process(double delta)
 	{
 		// El láser sube por la pantalla
 		Position -= new Vector2(0, velocidad * (float)delta);
 
-		// Si sale de la pantalla por arriba, lo borramos para liberar memoria
+		// Si se sale por arriba de la pantalla, lo borramos de memoria para no gastar recursos
 		if (Position.Y < -50)
 		{
 			QueueFree();
@@ -23,13 +23,13 @@ public partial class Laser : Area2D
 		if (hasHit) return; 
 		hasHit = true;
 			
-		// Sumamos puntos a través del administrador general
+		// Le aviso al GameManager que sume puntos
 		if (GameManager.instance != null)
 		{
 			GameManager.instance.sumarPuntos(10);
 		}
 
-		// Borramos al alien al que le pegamos y también destruimos nuestro láser
+		// Borro al alien y también destruyo mi propio láser
 		area.QueueFree(); 
 		QueueFree();
 	}

@@ -11,53 +11,47 @@ public partial class AlienManager : Node2D
 	[Export] public float velocidad = 80.0f;
 	[Export] public PackedScene laserEnemigoEscena;
 
-	// Margen superior para que no aparezcan pegados arriba
 	[Export] public float offsetSuperior = 80.0f;
 
-	private int direccion = 1;
+	// Lo puse public para que los enemigos tiradores estáticos puedan leer la dirección de la horda
+	public int direccion = 1; 
 	private Vector2 tamanoPantalla;
 	private Vector2 posicionInicial;
 
 	public override void _Ready()
 	{
-		// Obtenemos la resolución actual de la pantalla/viewport
 		tamanoPantalla = GetViewportRect().Size;
-		
 		CentrarYCrearAliens();
 	}
 
 	public override void _Process(double delta)
 	{
-		// 1. Mover la horda
+		// 1. Muevo toda la horda horizontalmente
 		Position += new Vector2(velocidad * direccion * (float)delta, 0);
 
-		// Ancho total que ocupa la formación de aliens
 		float anchoHorda = (columnas - 1) * espacioH;
 
-		// 2. Colisión borde derecho
+		// 2. Si tocamos el borde derecho o izquierdo, bajamos y cambiamos de rumbo
 		if (Position.X + anchoHorda >= tamanoPantalla.X - 20 && direccion == 1)
 		{
 			BajarYCambiar();
 		}
-		// 3. Colisión borde izquierdo
 		else if (Position.X <= 20 && direccion == -1)
 		{
 			BajarYCambiar();
 		}
 
-		// 4. Reinicio si bajan demasiado (adaptado al alto de pantalla)
+		// 3. Si los aliens bajan demasiado, perdemos vida y reseteamos posición
 		if (Position.Y > tamanoPantalla.Y - 100)
 		{
 			if (GameManager.instance != null)
 			{
 				GameManager.instance.perderVida();
 			}
-			
-			// Restaurar a la posición inicial centrada
 			Position = posicionInicial; 
 		}
 
-		// 5. Victoria si no quedan enemigos
+		// 4. Si ya no quedan hijos (matamos a todos), pasamos al cartel de nivel completado
 		if (GetChildCount() == 0)
 		{
 			if (GameManager.instance != null)
@@ -68,42 +62,46 @@ public partial class AlienManager : Node2D
 	}
 
 	private void CentrarYCrearAliens()
-{
-	float anchoHorda = (columnas - 1) * espacioH;
-	float xInicial = (tamanoPantalla.X - anchoHorda) / 2.0f;
-	float yInicial = offsetSuperior;
-
-	posicionInicial = new Vector2(xInicial, yInicial);
-	Position = posicionInicial;
-
-	for (int r = 0; r < filas; r++)
 	{
-		for (int c = 0; c < columnas; c++)
+		float anchoHorda = (columnas - 1) * espacioH;
+		float xInicial = (tamanoPantalla.X - anchoHorda) / 2.0f;
+		float yInicial = offsetSuperior;
+
+		posicionInicial = new Vector2(xInicial, yInicial);
+		Position = posicionInicial;
+
+		int nivelActual = (GameManager.instance != null) ? GameManager.instance.nivelActual : 1;
+
+		for (int r = 0; r < filas; r++)
 		{
-			Enemigo alien = (Enemigo)alienEscena.Instantiate();
-			
-			// 1. Asignamos el tipo de enemigo por fila
-			if (r == 0)
+			for (int c = 0; c < columnas; c++)
 			{
-				alien.tipo = TipoEnemigo.Tirador;
-			}
-			else if (r == 1)
-			{
-				alien.tipo = TipoEnemigo.ZigZag;
-			}
-			else
-			{
-				alien.tipo = TipoEnemigo.Normal;
-			}
+				Enemigo alien = (Enemigo)alienEscena.Instantiate();
+				
+				// Acá defino qué tipo de bicho va en cada lugar:
+				// - Las columnas de las puntas (laterales) son los que hacen zigzag independiente
+				if (c == 0 || c == columnas - 1)
+				{
+					alien.tipo = TipoEnemigo.ZigZag;
+				}
+				// - En el nivel 3, los de arriba del todo (salvo las puntas) son los tiradores estáticos
+				else if (r == 0 && nivelActual == 3)
+				{
+					alien.tipo = TipoEnemigo.Tirador;
+				}
+				// - El resto son los normales de la horda común
+				else
+				{
+					alien.tipo = TipoEnemigo.Normal;
+				}
 
-			// 2. IMPORTANTE: Actualizamos la skin explícitamente
-			alien.ConfigurarSkin();
-
-			alien.Position = new Vector2(c * espacioH, r * espacioV);
-			AddChild(alien);
+				alien.ConfigurarSkin();
+				alien.Position = new Vector2(c * espacioH, r * espacioV);
+				AddChild(alien);
+			}
 		}
 	}
-}
+
 	private void BajarYCambiar()
 	{
 		direccion *= -1;
@@ -112,9 +110,12 @@ public partial class AlienManager : Node2D
 
 	private void _on_timer_timeout()
 	{
-		// Filtramos únicamente a los aliens que sean de tipo Tirador
+		int nivelActual = (GameManager.instance != null) ? GameManager.instance.nivelActual : 1;
+		if (nivelActual < 3) return; // Solo disparamos si estamos en el nivel 3
+
 		List<Enemigo> tiradores = new List<Enemigo>();
 
+		// Busco cuáles son los enemigos tiradores que siguen vivos
 		foreach (Node hijo in GetChildren())
 		{
 			if (hijo is Enemigo alien && alien.tipo == TipoEnemigo.Tirador)
@@ -123,7 +124,7 @@ public partial class AlienManager : Node2D
 			}
 		}
 
-		// Si hay tiradores vivos, uno aleatorio dispara
+		// Si hay tiradores, elijo uno al azar para que dispare su rayito
 		if (tiradores.Count > 0 && laserEnemigoEscena != null)
 		{
 			int indiceAleatorio = (int)(GD.Randi() % (uint)tiradores.Count);
