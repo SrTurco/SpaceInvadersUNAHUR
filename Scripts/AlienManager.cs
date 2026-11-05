@@ -40,7 +40,17 @@ public partial class AlienManager : Node2D
 			BajarYCambiar();
 		}
 
-		// 3. Si matamos a todos los bichos, ganamos el nivel
+		// 3. Control de altura: Si la horda baja demasiado y llega cerca de la base, perdemos vida y vuelve arriba
+		if (Position.Y >= 600.0f)
+		{
+			if (GameManager.instance != null)
+			{
+				GameManager.instance.perderVida();
+			}
+			Position = posicionInicial; 
+		}
+
+		// 4. Si matamos a todos los bichos, ganamos el nivel
 		if (GetChildCount() == 0)
 		{
 			if (GameManager.instance != null)
@@ -48,17 +58,6 @@ public partial class AlienManager : Node2D
 				GameManager.instance.pasarANivelCompletado();
 			}
 		}
-	}
-
-	// Método público para que cualquier alien avise si chocó al jugador
-	public void ReiniciarPosicionHorda()
-	{
-		if (GameManager.instance != null)
-		{
-			GameManager.instance.perderVida();
-		}
-		// Mandamos a toda la horda arriba de nuevo sin destruir al alien que chocó
-		Position = posicionInicial; 
 	}
 
 	private void CentrarYCrearAliens()
