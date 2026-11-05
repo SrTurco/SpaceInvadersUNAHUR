@@ -35,10 +35,6 @@ public partial class Enemigo : Area2D
 		}
 
 		ConfigurarSkin();
-		
-		// Conecto las señales de colisión por código para estar seguros
-		BodyEntered += AlChocarConCuerpo;
-		AreaEntered += AlChocarConArea;
 	}
 
 	public void ConfigurarSkin()
@@ -90,30 +86,6 @@ public partial class Enemigo : Area2D
 			if (padre is AlienManager alienManager)
 			{
 				Position -= new Vector2(alienManager.velocidad * alienManager.direccion * (float)delta, 0);
-			}
-		}
-	}
-
-	private void AlChocarConCuerpo(Node cuerpo)
-	{
-		VerificarJugador(cuerpo);
-	}
-
-	private void AlChocarConArea(Node area)
-	{
-		VerificarJugador(area);
-	}
-
-	private void VerificarJugador(Node nodo)
-	{
-		// Me fijo si lo que tocamos es el jugador
-		if (nodo != null && (nodo.IsInGroup("Jugador") || nodo.Name.ToString().ToLower().Contains("player") || nodo.Name == "CharacterBody2D" || (nodo.GetParent() != null && nodo.GetParent().IsInGroup("Jugador"))))
-		{
-			// Si tocamos al jugador, le avisamos al AlienManager (nuestro padre) que resetee toda la horda y reste una vida
-			Node padre = GetParent();
-			if (padre is AlienManager alienManager)
-			{
-				alienManager.ReiniciarPosicionHorda();
 			}
 		}
 	}
