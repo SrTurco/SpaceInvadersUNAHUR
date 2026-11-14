@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://clgc7afhnvmsl"]
+
+[ext_resource type="Script" uid="uid://di8mfrbw4fgxf" path="res://Scripts/Tutorial.cs" id="1_tutorial"]
+
+[node name="Tutorial" type="CanvasLayer" unique_id=554330130]
+script = ExtResource("1_tutorial")
