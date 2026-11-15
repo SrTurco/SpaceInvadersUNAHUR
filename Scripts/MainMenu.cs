@@ -16,11 +16,18 @@ public partial class MainMenu : CanvasLayer
 
 	public override void _Input(InputEvent @event)
 	{
-		
-		// Si presionan la letra 'Enter', volvemos al menú principal
-		if (@event is InputEventKey eventKey && eventKey.Pressed && eventKey.Keycode == Key.Enter)
+		if (@event is InputEventKey eventKey && eventKey.Pressed)
 		{
-			ReiniciarJuego();
+			// Si presionan 'Enter', empezamos a jugar
+			if (eventKey.Keycode == Key.Enter)
+			{
+				ReiniciarJuego();
+			}
+			// Si presionan 'T', vamos al tutorial
+			else if (eventKey.Keycode == Key.T)
+			{
+				GetTree().ChangeSceneToFile("res://Escenas/Tutorial.tscn");
+			}
 		}
 	}
 
