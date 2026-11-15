@@ -46,6 +46,7 @@ public partial class PauseMenu : CanvasLayer
 
 	private bool EstaEnEscenaExcluida()
 	{
+		GameManager.instance.escudoActivo = false;
 		// Obtenemos el nombre del nodo raíz de la escena actual
 		Node escenaActual = GetTree().CurrentScene;
 		if (escenaActual == null)

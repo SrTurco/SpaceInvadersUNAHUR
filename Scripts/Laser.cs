@@ -3,6 +3,7 @@ using Godot;
 public partial class Laser : Area2D
 {
 	[Export] public float velocidad = 400.0f;
+	[Export] public PackedScene powerUpEscena;
 	private bool hasHit = false; // Bandera para que el láser impacte una sola vez y no haga doble daño
 
 	public override void _Process(double delta)
@@ -20,8 +21,34 @@ public partial class Laser : Area2D
 	// Detecta cuando el láser toca a un alien
 	private void _on_area_entered(Area2D area)
 	{
-		if (hasHit) return; 
-		hasHit = true;
+		if (hasHit) return;
+
+    // 1. Si choca contra un disparo enemigo, desaparecen ambos
+    	if (area is LaserEnemigo laserEnemigo)
+    	{
+        	hasHit = true;
+        	laserEnemigo.QueueFree();
+        	QueueFree();
+        	return;
+    	}
+
+    // 2. Si no es un Enemigo (por ejemplo, es un PowerUp), lo ignoramos
+    	if (!(area is Enemigo alien))
+    	{
+        	return;
+    	}
+
+    hasHit = true;
+
+		if (alien.tienePowerUp && powerUpEscena != null)
+		{
+    		PowerUp item = (PowerUp)powerUpEscena.Instantiate();
+    		int randomTipo = (int)(GD.Randi() % 3);
+    		item.tipo = (TipoPowerUp)randomTipo;
+    		item.GlobalPosition = alien.GlobalPosition;
+    		GetTree().CurrentScene.CallDeferred("add_child", item);
+		}
+		
 			
 		// Le aviso al GameManager que sume puntos
 		if (GameManager.instance != null)
@@ -30,7 +57,7 @@ public partial class Laser : Area2D
 		}
 
 		// Borro al alien y también destruyo mi propio láser
-		area.QueueFree(); 
+		alien.QueueFree(); 
 		QueueFree();
 	}
 }

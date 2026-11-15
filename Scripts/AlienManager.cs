@@ -51,13 +51,23 @@ public partial class AlienManager : Node2D
 		}
 
 		// 4. Si matamos a todos los bichos, ganamos el nivel
-		if (GetChildCount() == 0)
-		{
-			if (GameManager.instance != null)
-			{
-				GameManager.instance.pasarANivelCompletado();
-			}
-		}
+		int enemigosVivos = 0;
+        foreach (Node hijo in GetChildren())
+        {
+            if (hijo is Enemigo)
+            {
+                enemigosVivos++;
+            }
+        }
+
+        if (enemigosVivos == 0)
+        {
+            SetProcess(false);
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.pasarANivelCompletado();
+            }
+        }
 	}
 
 	private void CentrarYCrearAliens()
@@ -105,6 +115,7 @@ public partial class AlienManager : Node2D
 				AddChild(alien);
 			}
 		}
+		AsignarPortadoresPowerUp(2);
 	}
 
 	private void BajarYCambiar()
@@ -138,4 +149,29 @@ public partial class AlienManager : Node2D
 			GetTree().CurrentScene.AddChild(laserE);
 		}
 	}
+
+	private void AsignarPortadoresPowerUp(int cantidad)
+{
+    List<Enemigo> todosLosAliens = new List<Enemigo>();
+
+    foreach (Node hijo in GetChildren())
+    {
+        if (hijo is Enemigo alien)
+        {
+            todosLosAliens.Add(alien);
+        }
+    }
+
+    // Elegimos 'cantidad' (2) enemigos distintos al azar
+    int asignados = 0;
+    while (asignados < cantidad && todosLosAliens.Count > 0)
+    {
+        int indice = (int)(GD.Randi() % (uint)todosLosAliens.Count);
+        Enemigo elegido = todosLosAliens[indice];
+
+        elegido.MarcarComoPortador();
+        todosLosAliens.RemoveAt(indice); // Lo sacamos de la lista para no elegir el mismo dos veces
+        asignados++;
+    }
+}
 }

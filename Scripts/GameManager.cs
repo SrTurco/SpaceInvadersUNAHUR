@@ -4,7 +4,7 @@ public partial class GameManager : Node
 {
 	// Instancia estática para poder consultar datos desde cualquier script fácilmente (como un GameManager global)
 	public static GameManager instance;
-
+	public bool escudoActivo = false;
 	[Export] public int puntos = 0;
 	[Export] public int vidas = 3;
 	public int nivelActual = 1; 
@@ -24,6 +24,12 @@ public partial class GameManager : Node
 	// Resta vida si nos pegan o si los aliens se pasan de la raya abajo
 	public void perderVida()
 	{
+		if (escudoActivo)
+    	{
+        	escudoActivo = false; // El escudo absorbe el golpe y se rompe
+        	GD.Print("¡El escudo absorbió el impacto!");
+        	return;
+    	}
 		vidas--;
 		if (vidas <= 0)
 		{
@@ -47,7 +53,7 @@ public partial class GameManager : Node
 		}
 		else
 		{
-			GetTree().ChangeSceneToFile("res://Escenas/WinScreen.tscn");
+			GetTree().ChangeSceneToFile("res://Escenas/Win.tscn");
 		}
 	}
 	

@@ -10,7 +10,7 @@ public enum TipoEnemigo
 public partial class Enemigo : Area2D
 {
 	[Export] public TipoEnemigo tipo = TipoEnemigo.Normal;
-
+	public bool tienePowerUp = false;
 	private Sprite2D skin1Node;
 	private Sprite2D skin2Node;
 	private Sprite2D skin3Node;
@@ -89,4 +89,10 @@ public partial class Enemigo : Area2D
 			}
 		}
 	}
+
+	public void MarcarComoPortador()
+    {
+        tienePowerUp = true;
+        Modulate = new Color(1.0f, 0.85f, 0.2f);
+    }
 }
