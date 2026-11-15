@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*uid://dodb156d1cxrf"
+PauseMenu="*res://Escenas/PauseMenu.tscn"
 
 [display]
 
