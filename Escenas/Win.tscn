@@ -1,3 +1,22 @@
 [gd_scene format=3 uid="uid://ci7elfrycbhwm"]
 
-[node name="Win" type="Node2D" unique_id=32913149]
+[ext_resource type="Script" uid="uid://by5p3tk51v2xu" path="res://Scripts/Win.cs" id="1_x4ri1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fhnfm"]
+font_size = 80
+
+[node name="Win" type="CanvasLayer" unique_id=414394207]
+script = ExtResource("1_x4ri1")
+
+[node name="Label" type="Label" parent="." unique_id=1889950549]
+offset_left = 62.0
+offset_top = 164.0
+offset_right = 960.0
+offset_bottom = 726.0
+text = "Ganaste!
+
+\"Enter\" para ir al menu
+\"Espacio\" para reiniciar
+"
+label_settings = SubResource("LabelSettings_fhnfm")
+horizontal_alignment = 1
