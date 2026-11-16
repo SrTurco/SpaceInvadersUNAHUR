@@ -6,6 +6,7 @@ public partial class MainMenu : CanvasLayer
 {
 	public override void _Ready()
 	{
+		GameManager.instance.escudoActivo = false;
 		// Conectamos el botón de la interfaz para volver al menú
 		Button botonMenu = GetNodeOrNull<Button>("Button"); 
 		if (botonMenu != null)
