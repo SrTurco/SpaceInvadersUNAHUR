@@ -1,16 +1,10 @@
 using Godot;
 using System.Collections.Generic;
 
-// Boss final del nivel 3.
-// Lo spawnea el AlienManager cuando se limpia la horda (ver bossEscena en AlienManager).
-// - Entra desde arriba sin recibir daño y después patrulla de lado a lado.
-// - Dispara LaserEnemigo y cada tanto suelta "esbirros" (Enemigo tipo Tirador) que bajan en zigzag y disparan.
-// - Al llegar a la mitad de vida pasa a fase 2 (más rápido, más agresivo).
-// - Al morir suma puntos y manda a NivelCompletado (que después lleva a Win).
 public partial class Boss : Area2D
 {
 	[ExportGroup("Vida")]
-	[Export] public int vidaMaxima = 10;
+	[Export] public int vidaMaxima = 30;
 	[Export] public int puntosAlMorir = 500;
 
 	[ExportGroup("Movimiento")]
@@ -25,6 +19,7 @@ public partial class Boss : Area2D
 	[Export] public int esbirrosPorOleada = 2;
 	[Export] public int maxEsbirros = 6;            // tope vivos al mismo tiempo
 	[Export] public float velocidadCaidaEsbirro = 70.0f;
+	[Export] public float probabilidadPowerUp = 0.3f; // chance (0 a 1) de que un esbirro suelte power-up al morir
 
 	[ExportGroup("Disparo")]
 	[Export] public PackedScene laserEnemigoEscena; // LaserEnemigo.tscn
@@ -91,8 +86,6 @@ public partial class Boss : Area2D
 		MoverEsbirros(dt);
 	}
 
-	// ---------------- Movimiento ----------------
-
 	private void MoverBoss(float dt)
 	{
 		float vel = velocidad * (fase2 ? 1.5f : 1.0f);
@@ -112,8 +105,6 @@ public partial class Boss : Area2D
 			direccion = 1;
 		}
 	}
-
-	// ---------------- Disparos y esbirros ----------------
 
 	private void ActualizarDisparos(float dt)
 	{
@@ -190,6 +181,13 @@ public partial class Boss : Area2D
 			Enemigo alien = (Enemigo)esbirroEscena.Instantiate();
 			alien.tipo = TipoEnemigo.Tirador; // skin de "tirador", así se nota que dispara
 
+			// Algunos esbirros salen dorados: al destruirlos sueltan un power-up
+			// (lo suelta Laser.cs, igual que con los enemigos de la horda)
+			if (GD.Randf() < probabilidadPowerUp)
+			{
+				alien.MarcarComoPortador();
+			}
+
 			float offsetX = (i - (cantidad - 1) / 2.0f) * 90.0f;
 			Vector2 posInicial = GlobalPosition + new Vector2(offsetX, 100);
 			alien.Position = posInicial;
@@ -226,6 +224,18 @@ public partial class Boss : Area2D
 			x = Mathf.Clamp(x, 30.0f, tamanoPantalla.X - 30.0f);
 			e.nodo.GlobalPosition = new Vector2(x, e.y);
 
+			// Si el esbirro choca con el jugador: le saca una vida y el esbirro desaparece
+			if (TocaAlJugador(e.nodo))
+			{
+				if (GameManager.instance != null)
+				{
+					GameManager.instance.perderVida();
+				}
+				e.nodo.QueueFree();
+				esbirros.RemoveAt(i);
+				continue;
+			}
+
 			// Si se va por abajo de la pantalla, lo sacamos
 			if (e.y > tamanoPantalla.Y + 40.0f)
 			{
@@ -235,12 +245,20 @@ public partial class Boss : Area2D
 		}
 	}
 
+	private bool TocaAlJugador(Enemigo alien)
+	{
+		// Mira qué cuerpos están pisando el área del esbirro y busca al jugador
+		foreach (Node2D cuerpo in alien.GetOverlappingBodies())
+		{
+			if (cuerpo is Player) return true;
+		}
+		return false;
+	}
+
 	private bool EsbirroVivo(DatosEsbirro e)
 	{
 		return e.nodo != null && IsInstanceValid(e.nodo) && !e.nodo.IsQueuedForDeletion();
 	}
-
-	// ---------------- Daño y muerte ----------------
 
 	// Lo llama Laser.cs cuando un láser del jugador toca al boss
 	public void RecibirDanio(int cantidad = 1)
@@ -316,8 +334,6 @@ public partial class Boss : Area2D
 			GetTree().ChangeSceneToFile("res://Escenas/Win.tscn");
 		}
 	}
-
-	// ---------------- Barra de vida ----------------
 
 	private void CrearBarraDeVida()
 	{
