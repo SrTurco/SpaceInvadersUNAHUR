@@ -1,4 +1,4 @@
-using Godot;
+ using Godot;
 
 public partial class GameManager : Node
 {
@@ -25,11 +25,11 @@ public partial class GameManager : Node
 	public void perderVida()
 	{
 		if (escudoActivo)
-    	{
-        	escudoActivo = false; // El escudo absorbe el golpe y se rompe
-        	GD.Print("¡El escudo absorbió el impacto!");
-        	return;
-    	}
+		{
+			escudoActivo = false; // El escudo absorbe el golpe y se rompe
+			GD.Print("¡El escudo absorbió el impacto!");
+			return;
+		}
 		vidas--;
 		if (vidas <= 0)
 		{

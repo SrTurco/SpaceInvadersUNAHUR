@@ -32,6 +32,15 @@ public partial class Laser : Area2D
         	return;
     	}
 
+    // Si choca contra el Boss, le saca vida y el láser desaparece
+    	if (area is Boss boss)
+    	{
+        	hasHit = true;
+        	boss.RecibirDanio(1);
+        	QueueFree();
+        	return;
+    	}
+
     // 2. Si no es un Enemigo (por ejemplo, es un PowerUp), lo ignoramos
     	if (!(area is Enemigo alien))
     	{
