@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dxl5gh3nvg0il" path="res://Escenas/Enemigo.tscn" id="4_eaurn"]
 [ext_resource type="PackedScene" uid="uid://cedjt4ydtr34w" path="res://Escenas/LaserEnemigo.tscn" id="5_kty2l"]
 [ext_resource type="PackedScene" uid="uid://cwfn2yd4ffkjt" path="res://Escenas/Interfaz.tscn" id="5_wt40r"]
+[ext_resource type="PackedScene" uid="uid://dy1iqpjd5a16o" path="res://Escenas/Boss.tscn" id="6_c7lvf"]
 
 [node name="Lvl3" type="Node2D" unique_id=1142043743]
 metadata/_edit_horizontal_guides_ = [649.0]
@@ -23,6 +24,7 @@ filas = 5
 espacioH = 80.0
 espacioV = 80.0
 laserEnemigoEscena = ExtResource("5_kty2l")
+bossEscena = ExtResource("6_c7lvf")
 
 [node name="Timer" type="Timer" parent="AlienManager" unique_id=895465606]
 wait_time = 1.5

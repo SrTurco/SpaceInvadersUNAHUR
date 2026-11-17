@@ -91,8 +91,8 @@ public partial class Enemigo : Area2D
 	}
 
 	public void MarcarComoPortador()
-    {
-        tienePowerUp = true;
-        Modulate = new Color(1.0f, 0.85f, 0.2f);
-    }
+	{
+		tienePowerUp = true;
+		Modulate = new Color(1.0f, 0.85f, 0.2f);
+	}
 }
