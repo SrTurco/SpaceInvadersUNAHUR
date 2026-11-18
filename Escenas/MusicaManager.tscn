@@ -6,6 +6,10 @@
 [ext_resource type="AudioStream" uid="uid://b1fsydbb01iog" path="res://Assets/Audio/MusicaJefe.ogg" id="4_8m80h"]
 [ext_resource type="AudioStream" uid="uid://d4wgrl2ncefn" path="res://Assets/Audio/MusicaVictoria.ogg" id="5_7kmva"]
 [ext_resource type="AudioStream" uid="uid://b8ln2k541yxu4" path="res://Assets/Audio/MusicaDerrota.ogg" id="6_3okui"]
+[ext_resource type="AudioStream" uid="uid://bubdygm0jn1co" path="res://Assets/Audio/NaveDestruida.ogg" id="7_3okui"]
+[ext_resource type="AudioStream" uid="uid://c6vwbe5ffuqw6" path="res://Assets/Audio/DisparoTriple.ogg" id="8_0dpge"]
+[ext_resource type="AudioStream" uid="uid://bg3q8ppoaxb1m" path="res://Assets/Audio/DisparoRayo.ogg" id="9_gylln"]
+[ext_resource type="AudioStream" uid="uid://c32ok0np28r4p" path="res://Assets/Audio/Escudo.ogg" id="10_26pxp"]
 
 [node name="MusicaManager" type="Node" unique_id=378011354]
 script = ExtResource("1_mus")
@@ -14,6 +18,10 @@ musicaPartida = ExtResource("3_8m80h")
 musicaJefe = ExtResource("4_8m80h")
 musicaVictoria = ExtResource("5_7kmva")
 musicaDerrota = ExtResource("6_3okui")
+sonidoDestruccion = ExtResource("7_3okui")
+sonidoPowerUpTriple = ExtResource("8_0dpge")
+sonidoPowerUpRapido = ExtResource("9_gylln")
+sonidoPowerUpEscudo = ExtResource("10_26pxp")
 
 [node name="Reproductor" type="AudioStreamPlayer" parent="." unique_id=1113836825]
 volume_db = -10.0

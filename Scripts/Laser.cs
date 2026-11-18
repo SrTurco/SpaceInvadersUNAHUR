@@ -23,39 +23,39 @@ public partial class Laser : Area2D
 	{
 		if (hasHit) return;
 
-    // 1. Si choca contra un disparo enemigo, desaparecen ambos
-    	if (area is LaserEnemigo laserEnemigo)
-    	{
-        	hasHit = true;
-        	laserEnemigo.QueueFree();
-        	QueueFree();
-        	return;
-    	}
+	// 1. Si choca contra un disparo enemigo, desaparecen ambos
+		if (area is LaserEnemigo laserEnemigo)
+		{
+			hasHit = true;
+			laserEnemigo.QueueFree();
+			QueueFree();
+			return;
+		}
 
-    // Si choca contra el Boss, le saca vida y el láser desaparece
-    	if (area is Boss boss)
-    	{
-        	hasHit = true;
-        	boss.RecibirDanio(1);
-        	QueueFree();
-        	return;
-    	}
+	// Si choca contra el Boss, le saca vida y el láser desaparece
+		if (area is Boss boss)
+		{
+			hasHit = true;
+			boss.RecibirDanio(1);
+			QueueFree();
+			return;
+		}
 
-    // 2. Si no es un Enemigo (por ejemplo, es un PowerUp), lo ignoramos
-    	if (!(area is Enemigo alien))
-    	{
-        	return;
-    	}
+	// 2. Si no es un Enemigo (por ejemplo, es un PowerUp), lo ignoramos
+		if (!(area is Enemigo alien))
+		{
+			return;
+		}
 
-    hasHit = true;
+	hasHit = true;
 
 		if (alien.tienePowerUp && powerUpEscena != null)
 		{
-    		PowerUp item = (PowerUp)powerUpEscena.Instantiate();
-    		int randomTipo = (int)(GD.Randi() % 3);
-    		item.tipo = (TipoPowerUp)randomTipo;
-    		item.GlobalPosition = alien.GlobalPosition;
-    		GetTree().CurrentScene.CallDeferred("add_child", item);
+			PowerUp item = (PowerUp)powerUpEscena.Instantiate();
+			int randomTipo = (int)(GD.Randi() % 3);
+			item.tipo = (TipoPowerUp)randomTipo;
+			item.GlobalPosition = alien.GlobalPosition;
+			GetTree().CurrentScene.CallDeferred("add_child", item);
 		}
 		
 			
@@ -66,6 +66,10 @@ public partial class Laser : Area2D
 		}
 
 		// Borro al alien y también destruyo mi propio láser
+		if (MusicaManager.instance != null)
+			{
+			MusicaManager.instance.SonidoDestruccion();
+		}
 		alien.QueueFree(); 
 		QueueFree();
 	}

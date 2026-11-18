@@ -30,10 +30,15 @@ public partial class GameManager : Node
 			GD.Print("¡El escudo absorbió el impacto!");
 			return;
 		}
+
+		
 		vidas--;
 		if (vidas <= 0)
-		{
-			// Si nos quedamos sin vidas, mandamos a la pantalla de Game Over
+		{ 
+		if (MusicaManager.instance != null)
+			{
+			MusicaManager.instance.SonidoDestruccion();
+		}
 			GetTree().ChangeSceneToFile("res://Escenas/GameOverScreen.tscn");
 		}
 	}

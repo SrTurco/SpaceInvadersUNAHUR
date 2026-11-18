@@ -113,16 +113,19 @@ public partial class Player : CharacterBody2D
 		{
 			case TipoPowerUp.TripleTiro:
 				tiempoTriple = 5.0f;
+				if (MusicaManager.instance != null) MusicaManager.instance.SonidoPowerUpTriple();
 				break;
 
 			case TipoPowerUp.DisparoRapido:
 				tiempoRapido = 5.0f;
+				if (MusicaManager.instance != null) MusicaManager.instance.SonidoPowerUpRapido();
 				break;
 
 			case TipoPowerUp.Escudo:
 				tiempoEscudo = 5.0f;
 				if (GameManager.instance != null) GameManager.instance.escudoActivo = true;
-				Modulate = new Color(0.4f, 0.9f, 1.0f); // Tiñe la nave de celeste mientras dura el escudo
+				Modulate = new Color(0.4f, 0.9f, 1.0f);
+				if (MusicaManager.instance != null) MusicaManager.instance.SonidoPowerUpEscudo();
 				break;
 		}
 	}
