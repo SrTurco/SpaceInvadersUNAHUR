@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dn3tacqk53umh"]
+
+[ext_resource type="Script" uid="uid://dgvyshylhl2wu" path="res://Scripts/MusicaManager.cs" id="1_mus"]
+[ext_resource type="AudioStream" uid="uid://d1sowwkgu151a" path="res://Assets/Audio/MusicaMenu.ogg" id="2_ob3vs"]
+[ext_resource type="AudioStream" uid="uid://xwsk5hgq7421" path="res://Assets/Audio/MusicaIngame.ogg" id="3_8m80h"]
+[ext_resource type="AudioStream" uid="uid://b1fsydbb01iog" path="res://Assets/Audio/MusicaJefe.ogg" id="4_8m80h"]
+[ext_resource type="AudioStream" uid="uid://d4wgrl2ncefn" path="res://Assets/Audio/MusicaVictoria.ogg" id="5_7kmva"]
+[ext_resource type="AudioStream" uid="uid://b8ln2k541yxu4" path="res://Assets/Audio/MusicaDerrota.ogg" id="6_3okui"]
+
+[node name="MusicaManager" type="Node" unique_id=378011354]
+script = ExtResource("1_mus")
+musicaMenu = ExtResource("2_ob3vs")
+musicaPartida = ExtResource("3_8m80h")
+musicaJefe = ExtResource("4_8m80h")
+musicaVictoria = ExtResource("5_7kmva")
+musicaDerrota = ExtResource("6_3okui")
+
+[node name="Reproductor" type="AudioStreamPlayer" parent="." unique_id=1113836825]
+volume_db = -10.0

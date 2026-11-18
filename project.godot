@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 
 GameManager="*uid://dodb156d1cxrf"
 PauseMenu="*res://Escenas/PauseMenu.tscn"
+MusicaManager="*uid://dn3tacqk53umh"
 
 [display]
 

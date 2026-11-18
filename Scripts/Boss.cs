@@ -58,7 +58,11 @@ public partial class Boss : Area2D
 		vida = vidaMaxima;
 		direccion = (GD.Randi() % 2 == 0) ? 1 : -1;
 		CrearBarraDeVida();
-	}
+		if (MusicaManager.instance != null)
+			{
+		MusicaManager.instance.ReproducirJefe();
+			}
+		}
 
 	public override void _Process(double delta)
 	{

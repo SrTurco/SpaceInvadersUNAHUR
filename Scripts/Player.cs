@@ -13,9 +13,9 @@ public partial class Player : CharacterBody2D
 	private Node2D laserActual = null;
 
 	private float tiempoTriple = 0.0f;
-    private float tiempoRapido = 0.0f;
-    private float tiempoEscudo = 0.0f;
-    private float cooldownRapido = 0.0f;
+	private float tiempoRapido = 0.0f;
+	private float tiempoEscudo = 0.0f;
+	private float cooldownRapido = 0.0f;
 	public override void _PhysicsProcess(double delta)
 	{
 		float t = (float)delta;
@@ -40,14 +40,14 @@ public partial class Player : CharacterBody2D
 
 		// Si apreto la barra espaciadora, disparamos
 		//Lógica de disparo rápido vs normal
-        if (tiempoRapido > 0)
-        {
-            if (Input.IsActionPressed("ui_accept") && cooldownRapido <= 0)
-            {
-                Disparar();
-                cooldownRapido = 0.15f;
-            }
-        }
+		if (tiempoRapido > 0)
+		{
+			if (Input.IsActionPressed("ui_accept") && cooldownRapido <= 0)
+			{
+				Disparar();
+				cooldownRapido = 0.15f;
+			}
+		}
 		else if (Input.IsActionJustPressed("ui_accept"))
 		{
 			Disparar();
@@ -69,16 +69,16 @@ public partial class Player : CharacterBody2D
 			return; 
 		}
 		if (tiempoTriple > 0)
-        {
-            float[] offsets = { -25.0f, 0.0f, 25.0f };
-            foreach (float offsetX in offsets)
-            {
-                Node2D laser = (Node2D)laserEscena.Instantiate();
-                laser.GlobalPosition = GlobalPosition + new Vector2(offsetX, -30);
-                GetTree().CurrentScene.AddChild(laser);
-                laserActual = laser;
-            }
-        }
+		{
+			float[] offsets = { -25.0f, 0.0f, 25.0f };
+			foreach (float offsetX in offsets)
+			{
+				Node2D laser = (Node2D)laserEscena.Instantiate();
+				laser.GlobalPosition = GlobalPosition + new Vector2(offsetX, -30);
+				GetTree().CurrentScene.AddChild(laser);
+				laserActual = laser;
+			}
+		}
 		else
 		{
 			// Instancio el nuevo láser y lo guardo en la variable
@@ -90,40 +90,40 @@ public partial class Player : CharacterBody2D
 
 
 	private void ActualizarPowerUps(float t)
-    {
-        if (tiempoTriple > 0) tiempoTriple -= t;
-        if (tiempoRapido > 0) tiempoRapido -= t;
-        if (cooldownRapido > 0) cooldownRapido -= t;
+	{
+		if (tiempoTriple > 0) tiempoTriple -= t;
+		if (tiempoRapido > 0) tiempoRapido -= t;
+		if (cooldownRapido > 0) cooldownRapido -= t;
 
-        if (tiempoEscudo > 0)
-        {
-            tiempoEscudo -= t;
-            // Si el escudo se gastó por un golpe o se acabó el tiempo, apagamos el efecto visual
-            if (tiempoEscudo <= 0 || (GameManager.instance != null && !GameManager.instance.escudoActivo))
-            {
-                tiempoEscudo = 0;
-                if (GameManager.instance != null) GameManager.instance.escudoActivo = false;
-                Modulate = Colors.White; // Devuelve el color normal a la nave
-            }
-        }
-    }
+		if (tiempoEscudo > 0)
+		{
+			tiempoEscudo -= t;
+			// Si el escudo se gastó por un golpe o se acabó el tiempo, apagamos el efecto visual
+			if (tiempoEscudo <= 0 || (GameManager.instance != null && !GameManager.instance.escudoActivo))
+			{
+				tiempoEscudo = 0;
+				if (GameManager.instance != null) GameManager.instance.escudoActivo = false;
+				Modulate = Colors.White; // Devuelve el color normal a la nave
+			}
+		}
+	}
 	public void ActivarPowerUp(TipoPowerUp tipo)
-    {
-        switch (tipo)
-        {
-            case TipoPowerUp.TripleTiro:
-                tiempoTriple = 5.0f;
-                break;
+	{
+		switch (tipo)
+		{
+			case TipoPowerUp.TripleTiro:
+				tiempoTriple = 5.0f;
+				break;
 
-            case TipoPowerUp.DisparoRapido:
-                tiempoRapido = 5.0f;
-                break;
+			case TipoPowerUp.DisparoRapido:
+				tiempoRapido = 5.0f;
+				break;
 
-            case TipoPowerUp.Escudo:
-                tiempoEscudo = 5.0f;
-                if (GameManager.instance != null) GameManager.instance.escudoActivo = true;
-                Modulate = new Color(0.4f, 0.9f, 1.0f); // Tiñe la nave de celeste mientras dura el escudo
-                break;
-        }
-    }
+			case TipoPowerUp.Escudo:
+				tiempoEscudo = 5.0f;
+				if (GameManager.instance != null) GameManager.instance.escudoActivo = true;
+				Modulate = new Color(0.4f, 0.9f, 1.0f); // Tiñe la nave de celeste mientras dura el escudo
+				break;
+		}
+	}
 }
