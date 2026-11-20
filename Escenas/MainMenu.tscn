@@ -1,23 +1,133 @@
-[gd_scene format=3 uid="uid://vstj3q6bgdhu"]
+[gd_scene load_steps=5 format=3 uid="uid://vstj3q6bgdhu"]
 
-[ext_resource type="Script" uid="uid://co3wgf1i6taqm" path="res://Scripts/MainMenu.cs" id="1_3bb84"]
+[ext_resource type="Script" path="res://Scripts/MainMenu.cs" id="main"]
+[ext_resource type="Script" path="res://Scripts/DemoArcade.cs" id="demo"]
+[ext_resource type="PackedScene" path="res://Escenas/Lvl2.tscn" id="nivel2"]
+[ext_resource type="FontFile" path="res://Assets/Fonts/SpaceInvaders.ttf" id="fuente_titulo"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_in5sg"]
-font_size = 80
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("main")
 
-[node name="MainMenu" type="CanvasLayer" unique_id=1244224314]
-script = ExtResource("1_3bb84")
-metadata/_edit_vertical_guides_ = [576.0]
+[node name="DemoArcade" type="Node2D" parent="."]
+script = ExtResource("demo")
+escenaNivel = ExtResource("nivel2")
 
-[node name="Label" type="Label" parent="." unique_id=411383064]
-offset_left = 160.0
-offset_top = 160.0
-offset_right = 856.0
-offset_bottom = 609.0
-text = "SPACEINVADERS
+[node name="UI" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-\"Enter\" para Jugar
-\"T\" para Tutorial"
-label_settings = SubResource("LabelSettings_in5sg")
+[node name="Velo" type="ColorRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Titulo" type="Control" parent="UI"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -450.0
+offset_top = -180.0
+offset_right = 450.0
+offset_bottom = -20.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="Nombre" type="Label" parent="UI/Titulo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("fuente_titulo")
+theme_override_font_sizes/font_size = 72
+theme_override_colors/font_color = Color(0.86, 1, 0.96, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.48, 0.44, 1)
+theme_override_constants/outline_size = 4
+text = "SPACE INVADER"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Remix" type="Label" parent="UI/Titulo"]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 105.0
+offset_right = 850.0
+offset_bottom = 145.0
+rotation = -0.10
+theme_override_colors/font_color = Color(1, 0.45, 0.56, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "REMIX"
+horizontal_alignment = 1
+
+[node name="InsertarFicha" type="Label" parent="UI"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -280.0
+offset_top = 305.0
+offset_right = 280.0
+offset_bottom = 345.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.81, 0.38, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 30
+text = "INSERTE FICHA"
+horizontal_alignment = 1
+
+[node name="Botones" type="CenterContainer" parent="UI"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 390.0
+offset_right = 200.0
+offset_bottom = 620.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="Lista" type="VBoxContainer" parent="UI/Botones"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Jugar" type="Button" parent="UI/Botones/Lista"]
+custom_minimum_size = Vector2(360, 52)
+layout_mode = 2
+text = "JUGAR"
+
+[node name="Tutorial" type="Button" parent="UI/Botones/Lista"]
+custom_minimum_size = Vector2(360, 52)
+layout_mode = 2
+text = "TUTORIAL"
+
+[node name="Salir" type="Button" parent="UI/Botones/Lista"]
+custom_minimum_size = Vector2(360, 52)
+layout_mode = 2
+text = "SALIR"
+
+[node name="Ayuda" type="Label" parent="UI"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -55.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.52, 0.78, 0.74, 1)
+theme_override_font_sizes/font_size = 16
+text = "FLECHAS PARA ELEGIR   //   ENTER PARA ACEPTAR"
+horizontal_alignment = 1

@@ -5,13 +5,34 @@ public partial class LaserEnemigo : Area2D
 	[Export] public float velocidad = 300.0f;
 	private bool yaColisiono = false; // Bandera para que el láser impacte una sola vez
 
+	private Sprite2D sprite;
+	private float tiempoAnimacion;
+	private Vector2 direccion = Vector2.Down;
+
+	// Se fija una sola vez al disparar: no sigue al jugador después.
+	public void ApuntarA(Vector2 objetivo)
+	{
+		Vector2 desplazamiento = objetivo - GlobalPosition;
+		if (desplazamiento.LengthSquared() > 0.01f)
+			direccion = desplazamiento.Normalized();
+		Rotation = direccion.Angle() - Mathf.Pi / 2.0f;
+	}
+
+	public override void _Ready()
+	{
+		sprite = GetNode<Sprite2D>("Sprite2D");
+	}
+
 	public override void _Process(double delta)
 	{
+		tiempoAnimacion += (float)delta;
+		sprite.Scale = new Vector2(0.85f + 0.15f * Mathf.Sin(tiempoAnimacion * 22.0f), 1.0f);
 		// El láser del enemigo baja hacia la nave del jugador
-		Position += new Vector2(0, velocidad * (float)delta);
+		Position += direccion * velocidad * (float)delta;
 
 		// Si se va por abajo de la pantalla, lo borramos para liberar memoria
-		if (Position.Y > 800)
+		if (GlobalPosition.Y > GetViewportRect().Size.Y + 50 || GlobalPosition.Y < -50 ||
+			GlobalPosition.X < -50 || GlobalPosition.X > GetViewportRect().Size.X + 50)
 		{
 			QueueFree();
 		}
@@ -35,21 +56,20 @@ public partial class LaserEnemigo : Area2D
 		if (yaColisiono) return;
 		if (nodo == null) return;
 
-		// NUEVO: Si lo que tocamos es un Enemigo (cualquiera, sea Normal, Tirador o ZigZag), lo ignoramos por completo
-		if (nodo is Enemigo || nodo.Name.ToString().ToLower().Contains("enemigo") || (nodo.GetParent() != null && nodo.GetParent() is Enemigo))
+		if (nodo is BloqueRefugio bloque && !bloque.IsQueuedForDeletion())
 		{
-			return; 
+			yaColisiono = true;
+			bloque.RecibirImpacto();
+			QueueFree();
+			return;
 		}
 
-		// Nos fijamos si lo que tocamos es el jugador
-		bool esJugador = nodo.IsInGroup("Jugador") || 
-						 nodo.Name.ToString().ToLower().Contains("player") || 
-						 nodo.Name == "CharacterBody2D" || 
-						 (nodo.GetParent() != null && nodo.GetParent().IsInGroup("Jugador"));
+		bool esJugador = nodo is Player;
 
 		if (esJugador)
 		{
 			yaColisiono = true; // Marcamos que ya hizo efecto
+			GameManager.instance?.crearExplosion(GlobalPosition, new Color("73dcff"));
 
 			// Le restamos una vida al jugador mediante el GameManager
 			if (GameManager.instance != null)

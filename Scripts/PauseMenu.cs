@@ -5,6 +5,7 @@ public partial class PauseMenu : CanvasLayer
 	// Panel principal que contiene todo el menú de pausa
 	private Panel panelFondo;
 	private bool pausaActiva = false;
+	private Button botonContinuar;
 
 	// Nombres de escenas donde NO queremos que aparezca el menú de pausa
 	private readonly string[] escenasExcluidas = { "MainMenu", "Tutorial" };
@@ -32,6 +33,8 @@ public partial class PauseMenu : CanvasLayer
 			// Verificamos que no estemos en una escena excluida (menú o tutorial)
 			if (EstaEnEscenaExcluida())
 				return;
+			if (GetTree().CurrentScene is NivelBoss nivel && nivel.IntroduccionActiva)
+				return;
 
 			TogglePausa();
 		}
@@ -42,11 +45,11 @@ public partial class PauseMenu : CanvasLayer
 		pausaActiva = !pausaActiva;
 		panelFondo.Visible = pausaActiva;
 		GetTree().Paused = pausaActiva;
+		if (pausaActiva) botonContinuar.GrabFocus();
 	}
 
 	private bool EstaEnEscenaExcluida()
 	{
-		GameManager.instance.escudoActivo = false;
 		// Obtenemos el nombre del nodo raíz de la escena actual
 		Node escenaActual = GetTree().CurrentScene;
 		if (escenaActual == null)
@@ -65,89 +68,102 @@ public partial class PauseMenu : CanvasLayer
 
 	private void CrearInterfaz()
 	{
-		// --- Panel de fondo semitransparente que cubre toda la pantalla ---
-		panelFondo = new Panel();
+		// El velo deja ver la partida sin competir con los controles del panel.
+		panelFondo = new Panel { Name = "Fondo" };
+		panelFondo.AddThemeStyleboxOverride("panel", new StyleBoxFlat
+		{
+			BgColor = new Color(0.0f, 0.0f, 0.0f, 0.82f)
+		});
+		AddChild(panelFondo);
 		panelFondo.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
-		// Estilo del panel: fondo oscuro semitransparente
-		StyleBoxFlat estiloPanelFondo = new StyleBoxFlat();
-		estiloPanelFondo.BgColor = new Color(0, 0, 0, 0.7f);
-		panelFondo.AddThemeStyleboxOverride("panel", estiloPanelFondo);
-		AddChild(panelFondo);
+		var centro = new CenterContainer { Name = "Centro" };
+		panelFondo.AddChild(centro);
+		centro.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
-		// --- Contenedor vertical centrado para organizar todo ---
-		VBoxContainer contenedor = new VBoxContainer();
-		contenedor.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.Center);
-		contenedor.GrowHorizontal = Control.GrowDirection.Both;
-		contenedor.GrowVertical = Control.GrowDirection.Both;
-		contenedor.CustomMinimumSize = new Vector2(400, 350);
-		contenedor.OffsetLeft = -200;
-		contenedor.OffsetTop = -175;
-		contenedor.OffsetRight = 200;
-		contenedor.OffsetBottom = 175;
-		contenedor.Alignment = BoxContainer.AlignmentMode.Center;
+		var tarjeta = new PanelContainer { Name = "PanelArcade" };
+		tarjeta.CustomMinimumSize = new Vector2(440, 0);
+		var marco = new StyleBoxFlat { BgColor = new Color("071719"), BorderColor = new Color("28e2d4") };
+		marco.SetBorderWidthAll(3);
+		marco.SetContentMarginAll(28);
+		tarjeta.AddThemeStyleboxOverride("panel", marco);
+		centro.AddChild(tarjeta);
 
-		// Separación entre los elementos del menú
-		contenedor.AddThemeConstantOverride("separation", 30);
-		panelFondo.AddChild(contenedor);
+		var contenido = new VBoxContainer { Alignment = BoxContainer.AlignmentMode.Center };
+		contenido.AddThemeConstantOverride("separation", 14);
+		tarjeta.AddChild(contenido);
 
-		// --- Título "PAUSA" ---
-		Label tituloPausa = new Label();
-		tituloPausa.Text = "PAUSA";
-		tituloPausa.HorizontalAlignment = HorizontalAlignment.Center;
+		var etiqueta = CrearEtiqueta("SPACE INVADERS  //  PAUSA", 16, new Color("78c9bd"));
+		contenido.AddChild(etiqueta);
+		var titulo = CrearEtiqueta("JUEGO EN PAUSA", 38, new Color("d5fff1"));
+		contenido.AddChild(titulo);
+		var separador = new HSeparator();
+		contenido.AddChild(separador);
 
-		LabelSettings estiloTitulo = new LabelSettings();
-		estiloTitulo.FontSize = 64;
-		estiloTitulo.FontColor = Colors.White;
-		tituloPausa.LabelSettings = estiloTitulo;
-		contenedor.AddChild(tituloPausa);
+		botonContinuar = CrearBoton("CONTINUAR", new Color("6ceba5"));
+		botonContinuar.Name = "Continuar";
+		botonContinuar.Pressed += AlPresionarRegresar;
+		contenido.AddChild(botonContinuar);
 
-		// --- Botón: Regresar Al Juego ---
-		Button botonRegresar = CrearBoton("Regresar Al Juego");
-		botonRegresar.Pressed += AlPresionarRegresar;
-		contenedor.AddChild(botonRegresar);
+		var botonJefe = CrearBoton("PROBAR JEFE FINAL", new Color("8bd8ff"));
+		botonJefe.Name = "ProbarJefe";
+		botonJefe.Pressed += AlPresionarProbarJefe;
+		contenido.AddChild(botonJefe);
 
-		// --- Botón: Volver Al Menú ---
-		Button botonMenu = CrearBoton("Volver Al Menu");
+		var botonMenu = CrearBoton("VOLVER AL MENU", new Color("ffcf62"));
+		botonMenu.Name = "VolverAlMenu";
 		botonMenu.Pressed += AlPresionarVolverAlMenu;
-		contenedor.AddChild(botonMenu);
+		contenido.AddChild(botonMenu);
 
-		// --- Botón: Salir del Juego ---
-		Button botonSalir = CrearBoton("Salir del Juego");
+		var botonSalir = CrearBoton("SALIR DEL JUEGO", new Color("ff7290"));
+		botonSalir.Name = "Salir";
 		botonSalir.Pressed += AlPresionarSalir;
-		contenedor.AddChild(botonSalir);
+		contenido.AddChild(botonSalir);
+
+		var ayuda = CrearEtiqueta("ESC PARA CONTINUAR", 16, new Color("78c9bd"));
+		contenido.AddChild(ayuda);
 	}
 
-	private Button CrearBoton(string texto)
+	private static Label CrearEtiqueta(string texto, int tamano, Color color)
 	{
-		Button boton = new Button();
-		boton.Text = texto;
-		boton.CustomMinimumSize = new Vector2(300, 50);
+		var etiqueta = new Label { Text = texto, HorizontalAlignment = HorizontalAlignment.Center };
+		etiqueta.AddThemeFontSizeOverride("font_size", tamano);
+		etiqueta.AddThemeColorOverride("font_color", color);
+		return etiqueta;
+	}
 
-		// Estilo normal del botón
-		StyleBoxFlat estiloNormal = new StyleBoxFlat();
-		estiloNormal.BgColor = new Color(0.15f, 0.15f, 0.3f, 0.9f);
-		estiloNormal.SetCornerRadiusAll(8);
-		estiloNormal.SetContentMarginAll(10);
-		boton.AddThemeStyleboxOverride("normal", estiloNormal);
-
-		// Estilo cuando se pasa el mouse por encima
-		StyleBoxFlat estiloHover = new StyleBoxFlat();
-		estiloHover.BgColor = new Color(0.25f, 0.25f, 0.5f, 0.9f);
-		estiloHover.SetCornerRadiusAll(8);
-		estiloHover.SetContentMarginAll(10);
-		boton.AddThemeStyleboxOverride("hover", estiloHover);
-
-		// Estilo cuando se presiona
-		StyleBoxFlat estiloPresionado = new StyleBoxFlat();
-		estiloPresionado.BgColor = new Color(0.1f, 0.1f, 0.2f, 0.9f);
-		estiloPresionado.SetCornerRadiusAll(8);
-		estiloPresionado.SetContentMarginAll(10);
-		boton.AddThemeStyleboxOverride("pressed", estiloPresionado);
-
-		// Tamaño de fuente para los botones
+	private static Button CrearBoton(string texto, Color acento)
+	{
+		var boton = new Button { Text = texto, CustomMinimumSize = new Vector2(350, 52) };
 		boton.AddThemeFontSizeOverride("font_size", 24);
+		boton.AddThemeColorOverride("font_color", acento);
+		boton.AddThemeColorOverride("font_hover_color", new Color("071719"));
+		boton.AddThemeColorOverride("font_pressed_color", new Color("071719"));
+		boton.AddThemeColorOverride("font_focus_color", acento);
 
+		var normal = new StyleBoxFlat { BgColor = new Color("102526"), BorderColor = acento };
+		normal.SetBorderWidthAll(2);
+		normal.SetContentMarginAll(8);
+		boton.AddThemeStyleboxOverride("normal", normal);
+
+		var hover = new StyleBoxFlat { BgColor = acento, BorderColor = acento };
+		hover.SetBorderWidthAll(2);
+		hover.SetContentMarginAll(8);
+		boton.AddThemeStyleboxOverride("hover", hover);
+
+		var presionado = new StyleBoxFlat { BgColor = acento.Darkened(0.22f), BorderColor = Colors.White };
+		presionado.SetBorderWidthAll(2);
+		presionado.SetContentMarginAll(8);
+		boton.AddThemeStyleboxOverride("pressed", presionado);
+
+		// El marco exterior señala el botón seleccionado con teclado o mando.
+		var foco = new StyleBoxFlat { DrawCenter = false, BorderColor = Colors.White };
+		foco.SetBorderWidthAll(2);
+		foco.ExpandMarginLeft = 4;
+		foco.ExpandMarginRight = 4;
+		foco.ExpandMarginTop = 4;
+		foco.ExpandMarginBottom = 4;
+		boton.AddThemeStyleboxOverride("focus", foco);
 		return boton;
 	}
 
@@ -157,6 +173,21 @@ public partial class PauseMenu : CanvasLayer
 	{
 		// Despausa el juego y oculta el menú
 		TogglePausa();
+	}
+
+	private void AlPresionarProbarJefe()
+	{
+		// Inicia el combate con un estado limpio para poder probarlo varias veces.
+		pausaActiva = false;
+		panelFondo.Visible = false;
+		GetTree().Paused = false;
+		if (GameManager.instance != null)
+		{
+			GameManager.instance.vidas = 3;
+			GameManager.instance.puntos = 0;
+			GameManager.instance.nivelActual = 4;
+		}
+		GetTree().ChangeSceneToFile("res://Escenas/Boss.tscn");
 	}
 
 	private void AlPresionarVolverAlMenu()

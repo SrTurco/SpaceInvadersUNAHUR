@@ -1,17 +1,241 @@
-[gd_scene format=3 uid="uid://cr8hnu71kr61i"]
+[gd_scene load_steps=7 format=3 uid="uid://cr8hnu71kr61i"]
 
-[ext_resource type="Script" uid="uid://be08v21q0uvfc" path="res://Scripts/NivelCompletado.cs" id="1_shole"]
+[ext_resource type="Script" path="res://Scripts/NivelCompletado.cs" id="script"]
+[ext_resource type="Script" path="res://Scripts/FondoTransicion.cs" id="estrellas"]
+[ext_resource type="Texture2D" path="res://Assets/alien_normal.svg" id="alien"]
+[ext_resource type="Texture2D" path="res://Assets/alien_tirador.svg" id="tirador"]
+[ext_resource type="Texture2D" path="res://Assets/nave.svg" id="nave"]
 
-[node name="NivelCompletado" type="CanvasLayer" unique_id=650520539]
-script = ExtResource("1_shole")
-metadata/_edit_vertical_guides_ = [576.0]
-metadata/_edit_horizontal_guides_ = [324.0]
+[sub_resource type="StyleBoxFlat" id="panel_arcade"]
+bg_color = Color(0.018, 0.055, 0.06, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.157, 0.886, 0.831, 1)
 
-[node name="Label" type="Label" parent="." unique_id=1008931880]
-offset_left = 226.46204
-offset_top = 147.0
-offset_right = 927.16394
-offset_bottom = 502.0
+[node name="NivelCompletado" type="CanvasLayer"]
+script = ExtResource("script")
+
+[node name="Estrellas" type="Node2D" parent="."]
+script = ExtResource("estrellas")
+
+[node name="UI" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Cabecera" type="Label" parent="UI"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 44.0
+offset_bottom = 75.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.42, 0.73, 0.69, 1)
+theme_override_font_sizes/font_size = 19
+text = "SPACE INVADER  //  REMIX"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="UI"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -360.0
+offset_top = 100.0
+offset_right = 360.0
+offset_bottom = 650.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("panel_arcade")
+
+[node name="Sector" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 22.0
+offset_right = 690.0
+offset_bottom = 55.0
+theme_override_colors/font_color = Color(1, 0.81, 0.38, 1)
+theme_override_font_sizes/font_size = 23
+text = "SECTOR // 01"
+horizontal_alignment = 1
+
+[node name="Titulo" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 64.0
+offset_right = 690.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.72, 1, 0.84, 1)
+theme_override_font_sizes/font_size = 52
+text = "NIVEL COMPLETADO"
+horizontal_alignment = 1
+
+[node name="AlienIzquierdo" type="TextureRect" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 153.0
+offset_right = 130.0
+offset_bottom = 198.0
+mouse_filter = 2
+texture_filter = 1
+texture = ExtResource("alien")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AlienDerecho" type="TextureRect" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 590.0
+offset_top = 153.0
+offset_right = 650.0
+offset_bottom = 198.0
+mouse_filter = 2
+texture_filter = 1
+texture = ExtResource("tirador")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Progreso" type="HBoxContainer" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 166.0
+offset_top = 154.0
+offset_right = 554.0
+offset_bottom = 200.0
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="Paso1" type="Label" parent="UI/Panel/Progreso"]
+custom_minimum_size = Vector2(84, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "01"
 horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 2
+
+[node name="Paso2" type="Label" parent="UI/Panel/Progreso"]
+custom_minimum_size = Vector2(84, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "02"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Paso3" type="Label" parent="UI/Panel/Progreso"]
+custom_minimum_size = Vector2(84, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "03"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PasoJefe" type="Label" parent="UI/Panel/Progreso"]
+custom_minimum_size = Vector2(84, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "JEFE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Linea" type="ColorRect" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 222.0
+offset_right = 650.0
+offset_bottom = 224.0
+mouse_filter = 2
+color = Color(0.18, 0.42, 0.40, 1)
+
+[node name="PuntosTitulo" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 247.0
+offset_right = 345.0
+offset_bottom = 278.0
+theme_override_colors/font_color = Color(0.48, 0.75, 0.72, 1)
+theme_override_font_sizes/font_size = 19
+text = "PUNTAJE"
+horizontal_alignment = 1
+
+[node name="PuntosValor" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 125.0
+offset_top = 279.0
+offset_right = 345.0
+offset_bottom = 322.0
+theme_override_colors/font_color = Color(1, 0.81, 0.38, 1)
+theme_override_font_sizes/font_size = 30
+text = "000000"
+horizontal_alignment = 1
+
+[node name="VidasTitulo" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 375.0
+offset_top = 247.0
+offset_right = 595.0
+offset_bottom = 278.0
+theme_override_colors/font_color = Color(0.48, 0.75, 0.72, 1)
+theme_override_font_sizes/font_size = 19
+text = "VIDAS"
+horizontal_alignment = 1
+
+[node name="VidasValor" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 375.0
+offset_top = 279.0
+offset_right = 595.0
+offset_bottom = 322.0
+theme_override_colors/font_color = Color(0.42, 0.92, 0.65, 1)
+theme_override_font_sizes/font_size = 30
+text = "03"
+horizontal_alignment = 1
+
+[node name="SiguienteTitulo" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 348.0
+offset_right = 600.0
+offset_bottom = 380.0
+theme_override_colors/font_color = Color(0.48, 0.75, 0.72, 1)
+theme_override_font_sizes/font_size = 19
+text = "SIGUIENTE DESTINO"
+horizontal_alignment = 1
+
+[node name="SiguienteValor" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 382.0
+offset_right = 620.0
+offset_bottom = 427.0
+theme_override_colors/font_color = Color(1, 0.45, 0.56, 1)
+theme_override_font_sizes/font_size = 31
+text = "NIVEL 02"
+horizontal_alignment = 1
+
+[node name="Continuar" type="Label" parent="UI/Panel"]
+layout_mode = 0
+offset_left = 50.0
+offset_top = 475.0
+offset_right = 670.0
+offset_bottom = 510.0
+theme_override_colors/font_color = Color(1, 0.81, 0.38, 1)
+theme_override_font_sizes/font_size = 22
+text = "PRESIONA ESPACIO PARA CONTINUAR"
+horizontal_alignment = 1
+
+[node name="Nave" type="TextureRect" parent="UI"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 680.0
+offset_right = 20.0
+offset_bottom = 720.0
+grow_horizontal = 2
+mouse_filter = 2
+texture_filter = 1
+texture = ExtResource("nave")
+expand_mode = 1
+stretch_mode = 5

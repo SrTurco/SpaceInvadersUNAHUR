@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/Sonidos.gd" id="1_son"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/NaveDestruida.ogg" id="2_4ojoy"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/MusicaMenu.ogg" id="2_31hp8"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/Hover.mp3" id="2_208py"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/DisparoJugador.mp3" id="3_2atev"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/DisparoEnemigo.mp3" id="4_iin5h"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/MusicaDerrota.ogg" id="5_wirg3"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/DMG.mp3" id="6_3mls4"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/Jefe.mp3" id="7_f1sbh"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/MusicaJefe.ogg" id="8_3mls4"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/Carga.mp3" id="9_5a0at"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/Rayo.mp3" id="10_vwn5j"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/MusicaVictoria.ogg" id="11_31hp8"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/Escudo.ogg" id="12_esc"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/DisparoTriple.ogg" id="13_dtr"]
+[ext_resource type="AudioStream" path="res://Assets/Audio/DisparoRayo.ogg" id="14_dra"]
+
+[node name="Sonidos" type="Node"]
+script = ExtResource("1_son")
+musica_menu = ExtResource("2_31hp8")
+musica_jefe = ExtResource("8_3mls4")
+musica_victoria = ExtResource("11_31hp8")
+musica_derrota = ExtResource("5_wirg3")
+hover = ExtResource("2_208py")
+disparo = ExtResource("3_2atev")
+disparo_enemigo = ExtResource("4_iin5h")
+explosion = ExtResource("2_4ojoy")
+danio = ExtResource("6_3mls4")
+jefe = ExtResource("7_f1sbh")
+carga = ExtResource("9_5a0at")
+rayo = ExtResource("10_vwn5j")
+escudo = ExtResource("12_esc")
+disparo_triple = ExtResource("13_dtr")
+disparo_rapido = ExtResource("14_dra")

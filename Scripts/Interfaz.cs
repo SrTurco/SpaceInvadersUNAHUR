@@ -17,8 +17,8 @@ public partial class Interfaz : CanvasLayer
 		// Actualizamos en tiempo real los puntos y vidas en pantalla según el GameManager
 		if (GameManager.instance != null)
 		{
-			textoPuntos.Text = "score: " + GameManager.instance.puntos;
-			textoVidas.Text = "vida: " + GameManager.instance.vidas;
+			textoPuntos.Text = "PUNTOS: " + GameManager.instance.puntos.ToString("D6");
+			textoVidas.Text = "VIDAS: " + GameManager.instance.vidas;
 		}
 	}
 }

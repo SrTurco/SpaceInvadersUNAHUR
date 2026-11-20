@@ -1,32 +1,32 @@
-[gd_scene format=3 uid="uid://cnji12v4anddu"]
+[gd_scene format=3]
 
-[ext_resource type="Texture2D" uid="uid://b0b1wmd4s1moi" path="res://Assets/powerUp_escudo.png" id="1_3il6q"]
-[ext_resource type="Script" uid="uid://baomcm6i3uug8" path="res://Scripts/PowerUp.cs" id="1_5lbbo"]
-[ext_resource type="Texture2D" uid="uid://derwwnb466o4c" path="res://Assets/powerUp_rapido.png" id="2_5lbbo"]
-[ext_resource type="Texture2D" uid="uid://ba7ng3na5a5nm" path="res://Assets/powerUp_tripleTiro.png" id="3_7w8k5"]
+[ext_resource type="Texture2D" path="res://Assets/powerUp_escudo.png" id="1_3il6q"]
+[ext_resource type="Script" path="res://Scripts/PowerUp.cs" id="1_5lbbo"]
+[ext_resource type="Texture2D" path="res://Assets/powerUp_rapido.png" id="2_5lbbo"]
+[ext_resource type="Texture2D" path="res://Assets/powerUp_tripleTiro.png" id="3_7w8k5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_psn3x"]
 size = Vector2(42, 36)
 
-[node name="Area2D" type="Area2D" unique_id=53762580]
+[node name="Area2D" type="Area2D"]
 script = ExtResource("1_5lbbo")
 
-[node name="Escudo" type="Sprite2D" parent="." unique_id=1699544812]
+[node name="Escudo" type="Sprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(3, 3)
 texture = ExtResource("1_3il6q")
 
-[node name="Rayo" type="Sprite2D" parent="." unique_id=1696833893]
+[node name="Rayo" type="Sprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(3, 3)
 texture = ExtResource("2_5lbbo")
 
-[node name="DisparoTres" type="Sprite2D" parent="." unique_id=1370083230]
+[node name="DisparoTres" type="Sprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(3, 3)
 texture = ExtResource("3_7w8k5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=13424408]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_psn3x")
 

@@ -3,11 +3,12 @@ using Godot;
 public partial class Tutorial : CanvasLayer
 {
 	private int paginaActual = 0;
-	private const int TOTAL_PAGINAS = 2;
+	private const int TOTAL_PAGINAS = 3;
 
 	// Contenedores de cada página
 	private Control pagina1;
 	private Control pagina2;
+	private Control pagina3;
 
 	// Botones de navegación
 	private Button botonSiguiente;
@@ -55,6 +56,10 @@ public partial class Tutorial : CanvasLayer
 		// === PÁGINA 2: Tipos de enemigos ===
 		pagina2 = CrearPagina2();
 		fondoGeneral.AddChild(pagina2);
+
+		// === PÁGINA 3: PowerUps ===
+		pagina3 = CrearPagina3();
+		fondoGeneral.AddChild(pagina3);
 
 		// === BARRA INFERIOR CON NAVEGACIÓN ===
 		HBoxContainer barraInferior = new HBoxContainer();
@@ -184,7 +189,7 @@ public partial class Tutorial : CanvasLayer
 		// --- Enemigo 1: Normal ---
 		contenedor.AddChild(
 			CrearFilaEnemigo(
-				"res://Assets/Space-invaders-top-alien.png",
+				"res://Assets/alien_normal.svg",
 				"Enemigo Normal",
 				"Va de izquierda a derecha bajando poco a poco.",
 				Colors.Green
@@ -196,7 +201,7 @@ public partial class Tutorial : CanvasLayer
 		// --- Enemigo 2: ZigZag ---
 		contenedor.AddChild(
 			CrearFilaEnemigo(
-				"res://Assets/images.png",
+				"res://Assets/alien_zigzag.svg",
 				"Enemigo ZigZag",
 				"Va haciendo zigzag y baja más rápido que los demás.",
 				Colors.Orange
@@ -208,10 +213,67 @@ public partial class Tutorial : CanvasLayer
 		// --- Enemigo 3: Tirador ---
 		contenedor.AddChild(
 			CrearFilaEnemigo(
-				"res://Assets/Space-Invaders-Alien-PNG-Image-with-Transparent-Background.png",
+				"res://Assets/alien_tirador.svg",
 				"Enemigo Tirador",
 				"Este alien queda estático pero ojo, ¡este dispara!",
 				Colors.Red
+			)
+		);
+
+		return contenedor;
+	}
+
+	// ============================================================
+	//  PÁGINA 3 — POWER-UPS
+	// ============================================================
+	private Control CrearPagina3()
+	{
+		VBoxContainer contenedor = CrearContenedorPagina();
+
+		// Subtítulo
+		Label subtitulo = CrearSubtitulo("POWER-UPS");
+		contenedor.AddChild(subtitulo);
+
+		contenedor.AddChild(CrearSeparador());
+
+		// Descripción general
+		Label intro = CrearTextoNormal("Algunos enemigos tienen color diferente. ¡Al destruirlos sueltan un power-up!");
+		intro.HorizontalAlignment = HorizontalAlignment.Center;
+		contenedor.AddChild(intro);
+
+		contenedor.AddChild(CrearEspaciador(10));
+
+		// --- PowerUp 1: Triple Tiro ---
+		contenedor.AddChild(
+			CrearFilaEnemigo(
+				"res://Assets/powerUp_tripleTiro.png",
+				"Triple Tiro",
+				"Dispara 3 láseres a la vez durante 5 segundos.",
+				new Color(0.3f, 0.8f, 1.0f) // Celeste
+			)
+		);
+
+		contenedor.AddChild(CrearEspaciador(15));
+
+		// --- PowerUp 2: Disparo Rápido ---
+		contenedor.AddChild(
+			CrearFilaEnemigo(
+				"res://Assets/powerUp_rapido.png",
+				"Disparo Rápido",
+				"Mantené presionado ESPACIO para disparar mucho más rápido durante 5 segundos.",
+				Colors.Yellow
+			)
+		);
+
+		contenedor.AddChild(CrearEspaciador(15));
+
+		// --- PowerUp 3: Escudo ---
+		contenedor.AddChild(
+			CrearFilaEnemigo(
+				"res://Assets/powerUp_escudo.png",
+				"Escudo",
+				"Te protege de un impacto enemigo. Dura 5 segundos o hasta recibir un golpe.",
+				new Color(0.4f, 0.9f, 1.0f) // Celeste claro
 			)
 		);
 
@@ -416,6 +478,7 @@ public partial class Tutorial : CanvasLayer
 
 		pagina1.Visible = (paginaActual == 0);
 		pagina2.Visible = (paginaActual == 1);
+		pagina3.Visible = (paginaActual == 2);
 
 		// Actualizar botones de navegación
 		botonAnterior.Disabled = (paginaActual == 0);

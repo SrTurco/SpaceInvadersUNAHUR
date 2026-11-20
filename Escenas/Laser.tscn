@@ -1,20 +1,20 @@
 [gd_scene format=3 uid="uid://b8ulql44psdxx"]
 
 [ext_resource type="Script" uid="uid://hknclhe7m7lh" path="res://Scripts/Laser.cs" id="1_jt7ek"]
-[ext_resource type="Texture2D" uid="uid://ktxig0mn02i3" path="res://icon.svg" id="2_jt7ek"]
-[ext_resource type="PackedScene" uid="uid://cnji12v4anddu" path="res://Escenas/PowerUp.tscn" id="2_l6dhm"]
+[ext_resource type="Texture2D" path="res://Assets/laser_jugador.svg" id="2_jt7ek"]
+[ext_resource type="PackedScene" path="res://Escenas/PowerUp.tscn" id="3_pwrup"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_asa25"]
 size = Vector2(9, 44)
 
 [node name="CharacterBody2D" type="Area2D" unique_id=1629999108]
 script = ExtResource("1_jt7ek")
-powerUpEscena = ExtResource("2_l6dhm")
+powerUpEscena = ExtResource("3_pwrup")
 metadata/_edit_horizontal_guides_ = [-48.0]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1521882832]
 position = Vector2(4.7683716e-07, 2.842171e-14)
-scale = Vector2(0.068749994, 0.34375)
+scale = Vector2(1, 1)
 texture = ExtResource("2_jt7ek")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1364010868]

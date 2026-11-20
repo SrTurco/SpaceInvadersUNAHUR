@@ -6,6 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://dxl5gh3nvg0il" path="res://Escenas/Enemigo.tscn" id="4_rlj6f"]
 [ext_resource type="PackedScene" uid="uid://cwfn2yd4ffkjt" path="res://Escenas/Interfaz.tscn" id="5_y25gf"]
 
+[ext_resource type="PackedScene" path="res://Escenas/LaserEnemigo.tscn" id="laser_enemigo"]
+
+[ext_resource type="Script" path="res://Scripts/Refugios.cs" id="refugios_script"]
+
 [node name="Lvl1" type="Node2D" unique_id=1172304703]
 metadata/_edit_vertical_guides_ = [576.0]
 
@@ -16,8 +20,18 @@ laserEscena = ExtResource("2_eyb4a")
 
 [node name="AlienManager" type="Node2D" parent="." unique_id=1254925008]
 script = ExtResource("3_eyb4a")
+laserEnemigoEscena = ExtResource("laser_enemigo")
 alienEscena = ExtResource("4_rlj6f")
 espacioH = 80.0
 espacioV = 80.0
 
+[node name="Timer" type="Timer" parent="AlienManager"]
+wait_time = 3.0
+autostart = true
+
+[node name="Refugios" type="Node2D" parent="."]
+script = ExtResource("refugios_script")
+
 [node name="Interfaz" parent="." unique_id=1391914025 instance=ExtResource("5_y25gf")]
+
+[connection signal="timeout" from="AlienManager/Timer" to="AlienManager" method="_on_timer_timeout"]

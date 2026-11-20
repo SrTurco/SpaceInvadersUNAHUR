@@ -6,8 +6,18 @@ public partial class Laser : Area2D
 	[Export] public PackedScene powerUpEscena;
 	private bool hasHit = false; // Bandera para que el láser impacte una sola vez y no haga doble daño
 
+	private Sprite2D sprite;
+	private float tiempoAnimacion;
+
+	public override void _Ready()
+	{
+		sprite = GetNode<Sprite2D>("Sprite2D");
+	}
+
 	public override void _Process(double delta)
 	{
+		tiempoAnimacion += (float)delta;
+		sprite.Scale = new Vector2(0.85f + 0.15f * Mathf.Sin(tiempoAnimacion * 22.0f), 1.0f);
 		// El láser sube por la pantalla
 		Position -= new Vector2(0, velocidad * (float)delta);
 
@@ -23,50 +33,43 @@ public partial class Laser : Area2D
 	{
 		if (hasHit) return;
 
-    // 1. Si choca contra un disparo enemigo, desaparecen ambos
-    	if (area is LaserEnemigo laserEnemigo)
-    	{
-        	hasHit = true;
-        	laserEnemigo.QueueFree();
-        	QueueFree();
-        	return;
-    	}
-
-    // Si choca contra el Boss, le saca vida y el láser desaparece
-    	if (area is Boss boss)
-    	{
-        	hasHit = true;
-        	boss.RecibirDanio(1);
-        	QueueFree();
-        	return;
-    	}
-
-    // 2. Si no es un Enemigo (por ejemplo, es un PowerUp), lo ignoramos
-    	if (!(area is Enemigo alien))
-    	{
-        	return;
-    	}
-
-    hasHit = true;
-
-		if (alien.tienePowerUp && powerUpEscena != null)
+		// Si choca contra un disparo enemigo, desaparecen ambos
+		if (area is LaserEnemigo laserEnemigo)
 		{
-    		PowerUp item = (PowerUp)powerUpEscena.Instantiate();
-    		int randomTipo = (int)(GD.Randi() % 3);
-    		item.tipo = (TipoPowerUp)randomTipo;
-    		item.GlobalPosition = alien.GlobalPosition;
-    		GetTree().CurrentScene.CallDeferred("add_child", item);
-		}
-		
-			
-		// Le aviso al GameManager que sume puntos
-		if (GameManager.instance != null)
-		{
-			GameManager.instance.sumarPuntos(10);
+			hasHit = true;
+			laserEnemigo.QueueFree();
+			QueueFree();
+			return;
 		}
 
-		// Borro al alien y también destruyo mi propio láser
-		alien.QueueFree(); 
-		QueueFree();
+		if (area is BloqueRefugio bloque && !bloque.IsQueuedForDeletion())
+		{
+			hasHit = true;
+			bloque.RecibirImpacto();
+			QueueFree();
+		}
+		else if (area is Boss boss)
+		{
+			hasHit = true;
+			boss.RecibirGolpe();
+			QueueFree();
+		}
+		else if (area is Enemigo enemigo && !area.IsQueuedForDeletion())
+		{
+			hasHit = true;
+
+			// Si el enemigo es portador de un PowerUp, lo soltamos
+			if (enemigo.tienePowerUp && powerUpEscena != null)
+			{
+				PowerUp item = (PowerUp)powerUpEscena.Instantiate();
+				int randomTipo = (int)(GD.Randi() % 3);
+				item.tipo = (TipoPowerUp)randomTipo;
+				item.GlobalPosition = enemigo.GlobalPosition;
+				GetTree().CurrentScene.CallDeferred("add_child", item);
+			}
+
+			enemigo.Explotar();
+			QueueFree();
+		}
 	}
 }
