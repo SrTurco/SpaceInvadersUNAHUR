@@ -8,21 +8,19 @@
 
 config_version=5
 
-[animation]
-
-compatibility/default_parent_skeleton_in_mesh_instance_3d=true
-
 [application]
 
 config/name="SpaceInvaders"
-run/main_scene="uid://vstj3q6bgdhu"
+run/main_scene="res://Escenas/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Assets/icono_nodriza.svg"
 
 [autoload]
 
-GameManager="*uid://dodb156d1cxrf"
+GameManager="*res://Scripts/GameManager.cs"
 PauseMenu="*res://Escenas/PauseMenu.tscn"
+EfectoCRT="*res://Escenas/EfectoCRT.tscn"
+Sonidos="*res://Escenas/Sonidos.tscn"
 
 [display]
 
@@ -35,6 +33,14 @@ window/stretch/aspect="expand"
 
 project/assembly_name="SpaceInvaders"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdfxr/plugin.cfg")
+
+[gui]
+
+theme/custom_font="res://Assets/Fonts/PixelifySans.ttf"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
@@ -42,3 +48,4 @@ project/assembly_name="SpaceInvaders"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

@@ -9,17 +9,40 @@ public partial class Player : CharacterBody2D
 	// Acá arrastro la escena del láser desde el editor para poder clonarla
 	[Export] public PackedScene laserEscena;
 
-	// Variable para guardar el láser que acabamos de disparar
-	private Node2D laserActual = null;
+	private Sprite2D sprite;
+	private float tiempoAnimacion;
 
+	// --- Cooldown de disparo normal (0.75s) ---
+	private float cooldownDisparo = 0.0f;
+	private const float COOLDOWN_DISPARO_NORMAL = 0.75f;
+
+	// --- PowerUps ---
 	private float tiempoTriple = 0.0f;
-    private float tiempoRapido = 0.0f;
-    private float tiempoEscudo = 0.0f;
-    private float cooldownRapido = 0.0f;
+	private float tiempoRapido = 0.0f;
+	private float tiempoEscudo = 0.0f;
+	private float cooldownRapido = 0.0f;
+
+	public override void _Ready()
+	{
+		sprite = GetNode<Sprite2D>("Sprite2D");
+	}
+
+	public override void _Process(double delta)
+	{
+		tiempoAnimacion += (float)delta;
+		// La nave se inclina al moverse y pulsa ligeramente en reposo.
+		sprite.Rotation = Mathf.Lerp(sprite.Rotation, Velocity.X / velocidad * 0.15f, (float)delta * 10.0f);
+		sprite.Scale = new Vector2(1.0f, 1.0f + Mathf.Sin(tiempoAnimacion * 8.0f) * 0.035f);
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		float t = (float)delta;
 		ActualizarPowerUps(t);
+
+		// Bajo el cooldown de disparo normal
+		if (cooldownDisparo > 0) cooldownDisparo -= t;
+
 		// Agarro la velocidad actual de movimiento
 		Vector2 vel = Velocity;
 		// Leo las teclas (flechas o A/D para movernos a los costados)
@@ -38,92 +61,96 @@ public partial class Player : CharacterBody2D
 		pos.X = Mathf.Clamp(pos.X, margenBorde, anchoPantalla - margenBorde);
 		Position = pos;
 
-		// Si apreto la barra espaciadora, disparamos
-		//Lógica de disparo rápido vs normal
-        if (tiempoRapido > 0)
-        {
-            if (Input.IsActionPressed("ui_accept") && cooldownRapido <= 0)
-            {
-                Disparar();
-                cooldownRapido = 0.15f;
-            }
-        }
-		else if (Input.IsActionJustPressed("ui_accept"))
+		// Lógica de disparo rápido vs normal
+		if (tiempoRapido > 0)
 		{
-			Disparar();
+			// PowerUp activo: disparo rápido (mantener presionado)
+			if (Input.IsActionPressed("ui_accept") && cooldownRapido <= 0)
+			{
+				Disparar();
+				cooldownRapido = 0.15f;
+			}
+		}
+		else
+		{
+			// Disparo normal: cada 0.75 segundos
+			if (Input.IsActionJustPressed("ui_accept") && cooldownDisparo <= 0)
+			{
+				Disparar();
+				cooldownDisparo = COOLDOWN_DISPARO_NORMAL;
+			}
 		}
 	}
 
 	// Método para instanciar el láser del jugador
 	private void Disparar()
 	{
-		// Si ya hay un láser creado y sigue existiendo en pantalla, cortamos acá para evitar el spam
-		if (tiempoRapido <= 0 && laserActual != null && GodotObject.IsInstanceValid(laserActual))
-		{
-			return; 
-		}
-
 		if (laserEscena == null)
 		{
 			GD.Print("¡Che, te olvidaste de asignar el láser en el Inspector!");
 			return; 
 		}
+
 		if (tiempoTriple > 0)
-        {
-            float[] offsets = { -25.0f, 0.0f, 25.0f };
-            foreach (float offsetX in offsets)
-            {
-                Node2D laser = (Node2D)laserEscena.Instantiate();
-                laser.GlobalPosition = GlobalPosition + new Vector2(offsetX, -30);
-                GetTree().CurrentScene.AddChild(laser);
-                laserActual = laser;
-            }
-        }
+		{
+			float[] offsets = { -25.0f, 0.0f, 25.0f };
+			foreach (float offsetX in offsets)
+			{
+				Node2D laser = (Node2D)laserEscena.Instantiate();
+				laser.GlobalPosition = GlobalPosition + new Vector2(offsetX, -30);
+				GetTree().CurrentScene.AddChild(laser);
+			}
+			GameManager.instance?.reproducirSonido("disparo_triple");
+		}
 		else
 		{
-			// Instancio el nuevo láser y lo guardo en la variable
-			laserActual = (Node2D)laserEscena.Instantiate();
-			laserActual.GlobalPosition = GlobalPosition + new Vector2(0, -30);
-			GetTree().CurrentScene.AddChild(laserActual);
+			// Instancio el nuevo láser
+			Node2D laserNuevo = (Node2D)laserEscena.Instantiate();
+			laserNuevo.GlobalPosition = GlobalPosition + new Vector2(0, -30);
+			GetTree().CurrentScene.AddChild(laserNuevo);
+			GameManager.instance?.reproducirSonido("disparo");
 		}
 	}
 
-
 	private void ActualizarPowerUps(float t)
-    {
-        if (tiempoTriple > 0) tiempoTriple -= t;
-        if (tiempoRapido > 0) tiempoRapido -= t;
-        if (cooldownRapido > 0) cooldownRapido -= t;
+	{
+		if (tiempoTriple > 0) tiempoTriple -= t;
+		if (tiempoRapido > 0) tiempoRapido -= t;
+		if (cooldownRapido > 0) cooldownRapido -= t;
 
-        if (tiempoEscudo > 0)
-        {
-            tiempoEscudo -= t;
-            // Si el escudo se gastó por un golpe o se acabó el tiempo, apagamos el efecto visual
-            if (tiempoEscudo <= 0 || (GameManager.instance != null && !GameManager.instance.escudoActivo))
-            {
-                tiempoEscudo = 0;
-                if (GameManager.instance != null) GameManager.instance.escudoActivo = false;
-                Modulate = Colors.White; // Devuelve el color normal a la nave
-            }
-        }
-    }
+		if (tiempoEscudo > 0)
+		{
+			tiempoEscudo -= t;
+			// Si el escudo se gastó por un golpe o se acabó el tiempo, apagamos el efecto visual
+			if (tiempoEscudo <= 0 || (GameManager.instance != null && !GameManager.instance.escudoActivo))
+			{
+				tiempoEscudo = 0;
+				if (GameManager.instance != null) GameManager.instance.escudoActivo = false;
+				Modulate = Colors.White; // Devuelve el color normal a la nave
+			}
+		}
+	}
+
 	public void ActivarPowerUp(TipoPowerUp tipo)
-    {
-        switch (tipo)
-        {
-            case TipoPowerUp.TripleTiro:
-                tiempoTriple = 5.0f;
-                break;
+	{
+		switch (tipo)
+		{
+			case TipoPowerUp.TripleTiro:
+				tiempoTriple = 5.0f;
+				GameManager.instance?.reproducirSonido("disparo_triple");
+				break;
 
-            case TipoPowerUp.DisparoRapido:
-                tiempoRapido = 5.0f;
-                break;
+			case TipoPowerUp.DisparoRapido:
+				tiempoRapido = 5.0f;
+				GameManager.instance?.reproducirSonido("disparo_rapido");
+				break;
 
-            case TipoPowerUp.Escudo:
-                tiempoEscudo = 5.0f;
-                if (GameManager.instance != null) GameManager.instance.escudoActivo = true;
-                Modulate = new Color(0.4f, 0.9f, 1.0f); // Tiñe la nave de celeste mientras dura el escudo
-                break;
-        }
-    }
+			case TipoPowerUp.Escudo:
+				tiempoEscudo = 5.0f;
+				if (GameManager.instance != null) GameManager.instance.escudoActivo = true;
+				Modulate = new Color(0.4f, 0.9f, 1.0f); // Tiñe la nave de celeste mientras dura el escudo
+				GameManager.instance?.reproducirSonido("escudo");
+				break;
+		}
+	}
 }

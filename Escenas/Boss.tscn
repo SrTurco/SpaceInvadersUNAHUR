@@ -1,22 +1,47 @@
-[gd_scene format=3 uid="uid://dy1iqpjd5a16o"]
+[gd_scene format=3 uid="uid://ctgs07xgelui2"]
 
-[ext_resource type="Script" path="res://Scripts/Boss.cs" id="1_boss"]
-[ext_resource type="Texture2D" uid="uid://dvmyxqnh5k05s" path="res://Assets/Space-invaders-top-alien.png" id="2_tex"]
-[ext_resource type="PackedScene" uid="uid://dxl5gh3nvg0il" path="res://Escenas/Enemigo.tscn" id="3_enemigo"]
-[ext_resource type="PackedScene" uid="uid://cedjt4ydtr34w" path="res://Escenas/LaserEnemigo.tscn" id="4_laser"]
+[ext_resource type="Script" uid="uid://ccbm1cu8n28qm" path="res://Scripts/NivelBoss.cs" id="1"]
+[ext_resource type="PackedScene" uid="uid://bv2rjtv2wbdmj" path="res://Escenas/player.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://b8ulql44psdxx" path="res://Escenas/Laser.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://dxl5gh3nvg0il" path="res://Escenas/Enemigo.tscn" id="5"]
+[ext_resource type="Script" uid="uid://bv04ygmydjl7o" path="res://Scripts/Boss.cs" id="6"]
+[ext_resource type="Texture2D" uid="uid://bwxx0ds2i5bfl" path="res://Assets/jefe.jpg" id="7"]
+[ext_resource type="PackedScene" uid="uid://cedjt4ydtr34w" path="res://Escenas/LaserEnemigo.tscn" id="8"]
+[ext_resource type="PackedScene" uid="uid://cwfn2yd4ffkjt" path="res://Escenas/Interfaz.tscn" id="9"]
+[ext_resource type="Script" uid="uid://hk34qx3au7xh" path="res://Scripts/Refugios.cs" id="refugios_script"]
+[ext_resource type="Shader" uid="uid://bion6gn716h4k" path="res://Shaders/nodriza.gdshader" id="shader_jefe"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_boss"]
-size = Vector2(220, 130)
+[sub_resource type="ShaderMaterial" id="material_jefe"]
+shader = ExtResource("shader_jefe")
 
-[node name="Boss" type="Area2D"]
-script = ExtResource("1_boss")
-esbirroEscena = ExtResource("3_enemigo")
-laserEnemigoEscena = ExtResource("4_laser")
+[sub_resource type="RectangleShape2D" id="boss_shape"]
+size = Vector2(200, 90)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(1, 0.45, 0.45, 1)
-scale = Vector2(0.42, 0.42)
-texture = ExtResource("2_tex")
+[node name="NivelBoss" type="Node2D" unique_id=1732203981]
+script = ExtResource("1")
+alienEscena = ExtResource("5")
+laserEnemigoEscena = ExtResource("8")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_boss")
+[node name="Player" parent="." unique_id=989219733 instance=ExtResource("2")]
+position = Vector2(512, 740)
+scale = Vector2(1.4, 1.4)
+laserEscena = ExtResource("3")
+
+[node name="Formacion" type="Node2D" parent="." unique_id=46664563]
+
+[node name="Jefe" type="Area2D" parent="." unique_id=639908083]
+position = Vector2(512, 100)
+script = ExtResource("6")
+
+[node name="Sprite2D" type="Sprite2D" parent="Jefe" unique_id=1636255386]
+material = SubResource("material_jefe")
+scale = Vector2(0.15625, 0.15335)
+texture = ExtResource("7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Jefe" unique_id=2073752385]
+shape = SubResource("boss_shape")
+
+[node name="Refugios" type="Node2D" parent="." unique_id=1633073785]
+script = ExtResource("refugios_script")
+
+[node name="Interfaz" parent="." unique_id=1498181429 instance=ExtResource("9")]
