@@ -1,3 +1,22 @@
 [gd_scene format=3 uid="uid://dy1iqpjd5a16o"]
 
-[node name="Boss" type="Node2D" unique_id=1653673812]
+[ext_resource type="Script" path="res://Scripts/Boss.cs" id="1_boss"]
+[ext_resource type="Texture2D" uid="uid://dvmyxqnh5k05s" path="res://Assets/Space-invaders-top-alien.png" id="2_tex"]
+[ext_resource type="PackedScene" uid="uid://dxl5gh3nvg0il" path="res://Escenas/Enemigo.tscn" id="3_enemigo"]
+[ext_resource type="PackedScene" uid="uid://cedjt4ydtr34w" path="res://Escenas/LaserEnemigo.tscn" id="4_laser"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_boss"]
+size = Vector2(220, 130)
+
+[node name="Boss" type="Area2D"]
+script = ExtResource("1_boss")
+esbirroEscena = ExtResource("3_enemigo")
+laserEnemigoEscena = ExtResource("4_laser")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.45, 0.45, 1)
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_boss")

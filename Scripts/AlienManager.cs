@@ -10,6 +10,7 @@ public partial class AlienManager : Node2D
 	[Export] public float espacioV = 50.0f;
 	[Export] public float velocidad = 80.0f;
 	[Export] public PackedScene laserEnemigoEscena;
+	[Export] public PackedScene bossEscena; // Solo se asigna en Lvl3: si está, al limpiar la horda aparece el boss
 
 	[Export] public float offsetSuperior = 80.0f;
 
@@ -52,22 +53,36 @@ public partial class AlienManager : Node2D
 
 		// 4. Si matamos a todos los bichos, ganamos el nivel
 		int enemigosVivos = 0;
-        foreach (Node hijo in GetChildren())
-        {
-            if (hijo is Enemigo)
-            {
-                enemigosVivos++;
-            }
-        }
+		foreach (Node hijo in GetChildren())
+		{
+			if (hijo is Enemigo)
+			{
+				enemigosVivos++;
+			}
+		}
 
-        if (enemigosVivos == 0)
-        {
-            SetProcess(false);
-            if (GameManager.instance != null)
-            {
-                GameManager.instance.pasarANivelCompletado();
-            }
-        }
+		if (enemigosVivos == 0)
+		{
+			SetProcess(false);
+
+			if (bossEscena != null)
+			{
+				// Hay boss asignado: en vez de terminar el nivel, aparece el boss
+				InvocarBoss();
+			}
+			else if (GameManager.instance != null)
+			{
+				GameManager.instance.pasarANivelCompletado();
+			}
+		}
+	}
+
+	private void InvocarBoss()
+	{
+		Node2D boss = (Node2D)bossEscena.Instantiate();
+		// Arranca arriba de la pantalla, fuera de vista, y el boss mismo baja solo
+		boss.Position = new Vector2(tamanoPantalla.X / 2.0f, -150.0f);
+		GetTree().CurrentScene.AddChild(boss);
 	}
 
 	private void CentrarYCrearAliens()
@@ -152,26 +167,26 @@ public partial class AlienManager : Node2D
 
 	private void AsignarPortadoresPowerUp(int cantidad)
 {
-    List<Enemigo> todosLosAliens = new List<Enemigo>();
+	List<Enemigo> todosLosAliens = new List<Enemigo>();
 
-    foreach (Node hijo in GetChildren())
-    {
-        if (hijo is Enemigo alien)
-        {
-            todosLosAliens.Add(alien);
-        }
-    }
+	foreach (Node hijo in GetChildren())
+	{
+		if (hijo is Enemigo alien)
+		{
+			todosLosAliens.Add(alien);
+		}
+	}
 
-    // Elegimos 'cantidad' (2) enemigos distintos al azar
-    int asignados = 0;
-    while (asignados < cantidad && todosLosAliens.Count > 0)
-    {
-        int indice = (int)(GD.Randi() % (uint)todosLosAliens.Count);
-        Enemigo elegido = todosLosAliens[indice];
+	// Elegimos 'cantidad' (2) enemigos distintos al azar
+	int asignados = 0;
+	while (asignados < cantidad && todosLosAliens.Count > 0)
+	{
+		int indice = (int)(GD.Randi() % (uint)todosLosAliens.Count);
+		Enemigo elegido = todosLosAliens[indice];
 
-        elegido.MarcarComoPortador();
-        todosLosAliens.RemoveAt(indice); // Lo sacamos de la lista para no elegir el mismo dos veces
-        asignados++;
-    }
+		elegido.MarcarComoPortador();
+		todosLosAliens.RemoveAt(indice); // Lo sacamos de la lista para no elegir el mismo dos veces
+		asignados++;
+	}
 }
 }
