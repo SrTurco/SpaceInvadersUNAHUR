@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" width="256" height="256" viewBox="0 0 256 256" shape-rendering="crispEdges">
+  <metadata><rdf:RDF><rdf:Description><dc:description>Pibe cris was here</dc:description></rdf:Description></rdf:RDF></metadata>
+  <rect width="256" height="256" rx="16" fill="#071719"/>
+  <path d="M82 40H174V59H203V78H220V96H236V115H251V153H220V172H203V191H186V210H158V191H145V172H112V191H98V210H70V191H53V172H36V153H5V115H20V96H36V78H53V59H82Z" fill="#ddfff4" stroke="#28e2d4" stroke-width="5" stroke-linejoin="miter"/>
+  <path d="M54 112h16v16H54zm43 0h16v16H97zm46 0h16v16h-16zm43 0h16v16h-16z" fill="#071719"/>
+  <path d="M9 230H247" stroke="#ff7290" stroke-width="5"/>
+</svg>

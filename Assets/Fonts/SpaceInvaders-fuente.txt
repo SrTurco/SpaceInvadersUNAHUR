@@ -1,0 +1,5 @@
+Space Invaders Regular (space_invaders.ttf)
+Copyright kylemaoin 2010. El archivo de fuente no fue modificado; solo se cambió su nombre a SpaceInvaders.ttf.
+Fuente descargada desde: https://www.dafontfree.co/space-invaders-font/
+Los metadatos del TTF indican Creative Commons Attribution-ShareAlike 3.0: https://creativecommons.org/licenses/by-sa/3.0/
+La página de descarga indica «Personal Use Only». Como ambas indicaciones no coinciden, confirmar las condiciones con el autor antes de distribuir o utilizar comercialmente.
