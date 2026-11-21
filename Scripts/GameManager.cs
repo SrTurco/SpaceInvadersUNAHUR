@@ -150,7 +150,7 @@ public partial class GameManager : Node
 		vidas--;
 		// Guardar el puntaje antes del último impacto para mostrarlo en Game Over.
 		if (vidas <= 0) puntajeFinalDerrota = puntos;
-		puntos = 0;
+		puntos = Mathf.Max(puntos - 1000, 0);
 		reproducirSonido("danio");
 		if (vidas <= 0)
 		{
