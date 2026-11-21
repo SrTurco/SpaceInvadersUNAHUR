@@ -100,7 +100,7 @@ public partial class Player : CharacterBody2D
 				laser.GlobalPosition = GlobalPosition + new Vector2(offsetX, -30);
 				GetTree().CurrentScene.AddChild(laser);
 			}
-			GameManager.instance?.reproducirSonido("disparo_triple");
+			GameManager.instance?.reproducirSonido("disparo");
 		}
 		else
 		{
